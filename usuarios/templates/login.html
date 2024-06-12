@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jun 10 2024 14:44:35 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="666367d15a8bb5e92087974f" data-wf-site="665f53e454d37c916687fa90">
+
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <title>login</title>
+  <meta content="login" property="og:title">
+  <meta content="login" property="twitter:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/webflow.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/ranking2024.webflow.css' %}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script
+    type="text/javascript">WebFont.load({ google: { families: ["Exo:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"] } });</script>
+  <script
+    type="text/javascript">!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
+  <link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+  <link href="{% static 'images/webclip.png' %}" rel="apple-touch-icon">
+</head>
+
+<body>
+  <div class="login-content">
+    <div class="div-block-10"><img src="{% static 'images/AO_INFINITO_E_ALEM_LOGO.png' %}" loading="lazy" sizes="24vw"
+        srcset="images/AO_INFINITO_E_ALEM_LOGO-p-500.png 500w, images/AO_INFINITO_E_ALEM_LOGO-p-800.png 800w, images/AO_INFINITO_E_ALEM_LOGO-p-1080.png 1080w, images/AO_INFINITO_E_ALEM_LOGO-p-1600.png 1600w, images/AO_INFINITO_E_ALEM_LOGO.png 1920w"
+        alt="" class="image-7">
+      <p class="paragraph">Bem vindo ao Ranking 2024, entre com os seus dados para acessar.</p>
+      <div class="form-block w-form">
+        <form id="email-form" method="post" class="form">
+          {% csrf_token %}
+          <input
+            class="text-field w-input" maxlength="256" name="matricula" data-name="matricula" placeholder="Matrícula" type="text"
+            id="e-mail">
+
+            <input class="text-field w-input" maxlength="256" name="Senha" data-name="Senha"
+            placeholder="Senha" type="password" id="Senha"><input type="submit" data-wait="Entrando..."
+            class="submit-button w-button" value="Entrar"></form>
+
+  
+
+        {% if status == '20' %}
+        <div class="w-form-fail">
+          <div>Usuário ou senha incorretos.</div>
+        </div>
+        {% endif %}
+
+
+      </div><img src="{% static 'images/logo_bat.svg' %}" loading="lazy" alt="" class="image-8">
+    </div>
+  </div>
+</body>
+
+</html>
