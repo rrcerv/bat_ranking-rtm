@@ -1,1 +1,4 @@
-*.env
+.env
+settings.py
+gunicorn_start
+gunicorn
