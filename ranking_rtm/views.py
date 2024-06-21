@@ -26,7 +26,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 # VARIÁVEIS GLOBAIS
-path_user_images = f'C:\\Users\\Rodrigo\\Documents\\AddMind\\BAT\\Landing Ranking RTM\\landings\\ranking_rtm\\static\\userImages\\'
+path_user_images = env('PATH_USER_IMAGES')
 
 
 # FUNÇÕES 
@@ -173,7 +173,6 @@ def generate_ranking():
                     points = getattr(ranking_model, field.name)
                     json[regional] += points
 
-    print(json)
     current_time = timezone.now()
 
     for key, value in json.items():
@@ -262,8 +261,6 @@ def index(request):
 
         percentage = int((total_points/max_points)*100)
 
-        print(json)
-        print(percentage)
 
         return render(request, 'ranking_gerentes.html', {
             'ranking': json,
@@ -295,7 +292,6 @@ def upload_user_image(request):
         img = Image.open(BytesIO(base64.b64decode(imagem)))
         
         img = img.crop((bounding_box['left'], bounding_box['top'], bounding_box['right'], bounding_box['bottom']))
-        print((bounding_box['left'], bounding_box['top'], bounding_box['right'], bounding_box['bottom']))
 
         path_user_image = path_user_images + f'{encrypted_matricula}.{tipo}'
 

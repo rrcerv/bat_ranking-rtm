@@ -19,16 +19,12 @@ def login(request):
                 matricula = str(body.get('matricula', '0'))
                 senha = body.get('Senha', '0')
 
-                print(matricula, senha)
-
                 usuario = authenticate(matricula=matricula, password=senha)
 
                 if usuario is not None:
                     auth_login(request, usuario)
-                    print('login')
                     return redirect('index')
                 else:
-                    print('Usuário ou senha incorretos')
                     return render(request, 'login.html', {
                         'status': '20'
                     })
