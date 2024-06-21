@@ -121,17 +121,21 @@ def extract_image_data(base64_string):
 
 def user_has_photo(matricula):
     global path_user_images
-    
+
+    print(path_user_images)
+
     enc_matricula = encrypt_iv_fixo(matricula)
 
     path = path_user_images + enc_matricula + '.*'
 
     if glob.glob(path):
+        print('tem')
         path_arquivo = (glob.glob(path)[0])
         split = path_arquivo.split('\\')
         arquivo = split[len(split)-1]
         return arquivo
     else:
+        print('não tem')
         return
 
 def generate_ranking():

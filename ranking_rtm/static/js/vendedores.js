@@ -121,6 +121,7 @@ function fetchPhotoApi(results, base64Photo, AI){
         })
         .then(data => {
             window.location = window.location.href+`?plKfris=${randomNumber}`
+            window.location.reload(true)
         })
         .catch(error => {
             alert('Algo deu errado. Por favor, tente novamente.')
