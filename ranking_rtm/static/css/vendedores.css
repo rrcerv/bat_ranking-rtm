@@ -1,0 +1,54 @@
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.uploadFileButton{
+    font-size:15px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-width:2px;
+    border-style: inset;
+    border-color:#6d13b2;
+    background-color: #5d13b2;
+    border-radius:12px;
+    margin-top:4px;
+    width:auto;
+    cursor: pointer;
+}
+
+.uploadFileButton:hover {
+    background-color: #6d13b2;
+	outline: #8c65a9 auto 5px;
+}
+
+.cropperPhoto{
+    max-height:75%;
+}
+
+.modal-title{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-primary{
+    font-size:16px;
+    letter-spacing: 0.4px;
+    transition-duration: 0.4s;
+    background-color: #22352f;
+    color: rgb(214, 214, 214);
+    border-radius: 12px;
+    border: 2px solid #079762 !important;
+}
+
+.btn-primary:hover{
+    background-color: #079762;
+    color:rgb(193, 193, 193);
+}
+

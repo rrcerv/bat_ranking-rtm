@@ -19,5 +19,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index')
+    path('', views.index, name='index'),
+    path('teste_crop_images', views.teste_crop_image, name='teste_crop_image'),
+    path('uplim', views.upload_user_image, name='upload_user_image')
 ]

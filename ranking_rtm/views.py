@@ -2,11 +2,137 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import RankingGerentes, RankingVendedores, RankingRegionais, User
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.db.models import Q
 import datetime
 from django.utils import timezone
+import os
+import glob
 
-# Create your views here.
+import re
+import json
+import base64
+from PIL import Image # PRECISA INSTALAR NO SERVIDOR
+from io import BytesIO
+import random
+
+# CRIPTOGRAFIA -- PRECISA INSTALAR NO SERVIDOR pycryptodome
+from Crypto.Random import get_random_bytes
+from Crypto.Protocol.KDF import PBKDF2
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
+# VARIÁVEIS GLOBAIS
+path_user_images = f'C:\\Users\\Rodrigo\\Documents\\AddMind\\BAT\\Landing Ranking RTM\\landings\\ranking_rtm\\static\\userImages\\'
+
+
+# FUNÇÕES 
+
+# CRIPTOGRAFIA
+def encrypt(message):
+
+    chave_separadora = env('cripto_chave_separadora')
+    salt = env('cripto_salt')
+    password = env('cripto_password')
+    key = PBKDF2(password, salt, dkLen=32)
+
+    cipher = AES.new(key, AES.MODE_CBC)
+
+    cipher_data = cipher.encrypt(pad(message.encode(), AES.block_size))
+
+    encriptado = (cipher_data)
+
+    iv = cipher.iv
+
+    encriptado = base64.urlsafe_b64encode(encriptado).decode('utf-8')
+    
+    iv = base64.urlsafe_b64encode(iv).decode('utf-8')
+
+    return encriptado + chave_separadora + iv
+
+def decrypt(encriptado):
+    chave_separadora = env('cripto_chave_separadora')
+    salt = env('cripto_salt')
+    password = env('cripto_password')
+
+    encriptado = encriptado.split(chave_separadora)
+    
+    
+    iv = encriptado[1]
+    encriptado = encriptado[0]
+
+    encriptado = base64.urlsafe_b64decode(encriptado.encode('utf-8'))
+    iv = base64.urlsafe_b64decode(iv.encode('utf-8'))
+    key = PBKDF2(password, salt, dkLen=32)
+    cipher = AES.new(key, AES.MODE_CBC, iv = iv)
+
+    decrypted_text = unpad(cipher.decrypt(encriptado), AES.block_size).decode()
+
+    return (decrypted_text)
+
+def encrypt_iv_fixo(message):
+    salt = env('cripto_salt')
+    password = env('cripto_password')
+    key = PBKDF2(password, salt, dkLen=32)
+
+    iv_fixo=b'ZJ\xc4D\x15\xc9jy\x13\xfdD\x15v\xec\x19l'
+
+    cipher = AES.new(key, AES.MODE_CBC, iv=iv_fixo)
+
+    cipher_data = cipher.encrypt(pad(message.encode(), AES.block_size))
+
+    encriptado = (cipher_data)
+
+    encriptado = base64.urlsafe_b64encode(encriptado).decode('utf-8')
+
+    return encriptado
+
+def decrypt_iv_fixo(encriptado):
+    salt = env('cripto_salt')
+    password = env('cripto_password')
+    
+    iv_fixo=b'ZJ\xc4D\x15\xc9jy\x13\xfdD\x15v\xec\x19l'
+
+    encriptado = base64.urlsafe_b64decode(encriptado.encode('utf-8'))
+
+    key = PBKDF2(password, salt, dkLen=32)
+    cipher = AES.new(key, AES.MODE_CBC, iv = iv_fixo)
+
+    decrypted_text = unpad(cipher.decrypt(encriptado), AES.block_size).decode()
+
+    return (decrypted_text)
+# FIM CRIPTOGRAFIA 
+
+def extract_image_data(base64_string):
+    # Regex to extract the data part and the format
+    pattern = re.compile(r'data:image/(?P<type>[a-zA-Z]+);base64,(?P<data>.+)')
+    match = pattern.match(base64_string)
+    
+    if not match:
+        raise ValueError("Invalid base64 image string")
+    
+    image_type = match.group('type')
+    image_data = match.group('data')
+    
+    return image_type, image_data
+
+def user_has_photo(matricula):
+    global path_user_images
+    
+    enc_matricula = encrypt_iv_fixo(matricula)
+
+    path = path_user_images + enc_matricula + '.*'
+
+    if glob.glob(path):
+        path_arquivo = (glob.glob(path)[0])
+        split = path_arquivo.split('\\')
+        arquivo = split[len(split)-1]
+        return arquivo
+    else:
+        return
 
 def generate_ranking():
     json = {}
@@ -71,9 +197,10 @@ def retrieve_ranking_regionais():
 
     return ranking_regionais
 
+# Create your views here.
+
 @login_required
 def index(request):
-    
     usuario = request.user
 
     ranking_regionais = retrieve_ranking_regionais()
@@ -81,6 +208,11 @@ def index(request):
     if usuario.role == 'Vendedor':
         role = 'Vendedor'
         ranking = RankingVendedores.objects.get(usuario=usuario)
+
+        if (user_has_photo(usuario.matricula)):
+            arquivo_foto = user_has_photo(usuario.matricula)
+        else:
+            arquivo_foto = ''
 
         json = {}
         total_points = 0
@@ -98,11 +230,15 @@ def index(request):
         percentage = int((total_points/max_points)*100)
 
 
+        random_number = random.randint(1,100)
+
         return render(request, 'ranking_vendedores.html', {
             'ranking': json,
             'percentage': percentage,
             'ranking_regionais': ranking_regionais,
-            'usuario': usuario
+            'usuario': usuario,
+            'arquivo_foto': arquivo_foto,
+            'random_number': random_number
         })
 
 
@@ -135,3 +271,47 @@ def index(request):
             'ranking_regionais': ranking_regionais,
             'usuario': usuario
         })
+
+
+@login_required
+def teste_crop_image(request):
+    return render(request, 'teste_crop_image.html')
+
+# APIS
+@login_required
+def upload_user_image(request):
+    global path_user_images
+    if request.method == 'POST':
+        usuario = request.user
+        arquivo_foto_usuario = user_has_photo(usuario.matricula)
+        encrypted_matricula = encrypt_iv_fixo(usuario.matricula)
+
+        data = json.loads(request.body.decode('utf-8'))
+
+        foto_base64 = data['userImage']
+        bounding_box = (data['boundingBox'])
+
+        tipo, imagem = extract_image_data(foto_base64)
+        img = Image.open(BytesIO(base64.b64decode(imagem)))
+        
+        img = img.crop((bounding_box['left'], bounding_box['top'], bounding_box['right'], bounding_box['bottom']))
+        print((bounding_box['left'], bounding_box['top'], bounding_box['right'], bounding_box['bottom']))
+
+        path_user_image = path_user_images + f'{encrypted_matricula}.{tipo}'
+
+        if arquivo_foto_usuario:
+            os.remove(path_user_images + arquivo_foto_usuario)
+
+        img.save(path_user_image)
+        
+        return JsonResponse({'Response': 'Ok'})
+    else:
+        return JsonResponse({'Response': 'Metodo nao autorizado'}, status=418)
+
+
+
+'''
+- BUG NO CROPPER (TESTE COM MINHAS FOTOS)
+- MELHORAR LAYOUT DO CROPPER 
+- RESIZE NA FOTO
+'''

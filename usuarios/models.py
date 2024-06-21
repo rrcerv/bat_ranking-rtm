@@ -7,9 +7,6 @@ import uuid
 
 class CustomUserManager(UserManager):
     def _create_user(self, name, email, password, **extra_fields):
-        if not email:
-            raise ValueError("You have not provided a valid e-mail address")
-        
         email = self.normalize_email(email)
         user = self.model(email=email, name=name, **extra_fields)
         user.set_password(password)
@@ -54,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField()
+    email = models.EmailField(blank=True, null=True)
     matricula = models.CharField(max_length=50, null=False, blank=False, unique=True)
     name = models.CharField(max_length=255, blank=True, default='')
     role = models.CharField(max_length=20, choices=ROLES_CHOICES, default=Vendedor)
