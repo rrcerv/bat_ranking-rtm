@@ -211,6 +211,7 @@ def index(request):
 
         if (user_has_photo(usuario.matricula)):
             arquivo_foto = user_has_photo(usuario.matricula)
+            print(arquivo_foto)
         else:
             arquivo_foto = ''
 
