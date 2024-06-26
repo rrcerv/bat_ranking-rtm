@@ -295,8 +295,15 @@ def upload_user_image(request):
 
         path_user_image = path_user_images + f'{encrypted_matricula}.{tipo}'
 
-        if arquivo_foto_usuario:
-            os.remove(path_user_images + arquivo_foto_usuario)
+        ambient = env('AMBIENT')
+
+        if(ambient == 'dev'):
+            if arquivo_foto_usuario:
+                os.remove(path_user_images + arquivo_foto_usuario)
+        elif (ambient == 'prod'):
+            if arquivo_foto_usuario:
+                os.remove(path_user_image)
+
 
         img.save(path_user_image)
         
