@@ -201,6 +201,7 @@ def retrieve_ranking_regionais():
 @login_required
 def index(request):
     usuario = request.user
+    ambient = env('AMBIENT') 
 
     ranking_regionais = retrieve_ranking_regionais()
 
@@ -237,7 +238,8 @@ def index(request):
             'ranking_regionais': ranking_regionais,
             'usuario': usuario,
             'arquivo_foto': arquivo_foto,
-            'random_number': random_number
+            'random_number': random_number,
+            'ambient': ambient
         })
 
 
