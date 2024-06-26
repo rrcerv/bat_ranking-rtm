@@ -312,11 +312,3 @@ def upload_user_image(request):
         return JsonResponse({'Response': 'Metodo nao autorizado'}, status=418)
 
 
-
-'''
-    - TIRAR PRINTS
-    - DINAMIZAR A VARIÁVEL DE NOME DA FOTO (NO LINUX TÁ MANDANDO O PATH DA FOTO DUAS VEZES)
-    - INCLUIR O RESTANTE DAS TABELAS
-    - DIFERENCIAR GTM E GTV
-    - CRIAR PÁGINAS DIFERENTES PARA OS 2
-'''
