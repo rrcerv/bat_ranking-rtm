@@ -211,6 +211,12 @@ def index(request):
 
         if (user_has_photo(usuario.matricula)):
             arquivo_foto = user_has_photo(usuario.matricula)
+
+            if(ambient == 'dev'):
+                pass
+            elif(ambient == 'prod'):
+                arquivo_foto_split = arquivo_foto.split('//')
+                print(arquivo_foto_split)
             print(arquivo_foto)
         else:
             arquivo_foto = ''
