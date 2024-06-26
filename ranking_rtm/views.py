@@ -215,7 +215,7 @@ def index(request):
             if(ambient == 'dev'):
                 pass
             elif(ambient == 'prod'):
-                arquivo_foto_split = arquivo_foto.split('//')
+                arquivo_foto_split = arquivo_foto.split('/')
                 print(arquivo_foto_split)
             print(arquivo_foto)
         else:
