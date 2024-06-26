@@ -216,8 +216,7 @@ def index(request):
                 pass
             elif(ambient == 'prod'):
                 arquivo_foto_split = arquivo_foto.split('/')
-                print(arquivo_foto_split)
-            print(arquivo_foto)
+                arquivo_foto = arquivo_foto_split[len(arquivo_foto_split)-1]
         else:
             arquivo_foto = ''
 

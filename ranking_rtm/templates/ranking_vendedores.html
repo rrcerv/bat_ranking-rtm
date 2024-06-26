@@ -72,11 +72,7 @@
           <source src="{% static 'images/circle-astronaut_v2-transcode.webm' %}" data-wf-ignore="true">
         </video>
         <div class="astronaut">
-          {% if ambient == 'dev' %}
           <div class="foto_vendedor" style='background-image: radial-gradient(circle, rgba(13, 5, 38, .29), #0f0525), url({% static "userImages" %}/{{arquivo_foto}});'>
-          {% elif ambient == 'prod' %}
-          <div class="foto_vendedor" style='background-image: radial-gradient(circle, rgba(13, 5, 38, .29), #0f0525), url({{arquivo_foto}});'>
-          {% endif %}
           </div>
         </div>
       </div>
