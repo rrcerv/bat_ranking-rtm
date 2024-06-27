@@ -299,7 +299,7 @@ def index(request):
         percentage = int((total_points/max_points)*100)
 
 
-        return render(request, 'ranking_gerentes.html', {
+        return render(request, 'ranking_grm.html', {
             'ranking': json,
             'percentage': percentage,
             'ranking_regionais': ranking_regionais,
@@ -327,7 +327,7 @@ def index(request):
         percentage = int((total_points/max_points)*100)
 
 
-        return render(request, 'ranking_gerentes.html', {
+        return render(request, 'ranking_gtv.html', {
             'ranking': json,
             'percentage': percentage,
             'ranking_regionais': ranking_regionais,
