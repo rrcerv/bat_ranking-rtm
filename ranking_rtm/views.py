@@ -192,7 +192,8 @@ def retrieve_ranking_regionais():
     else:
         pass
 
-    ranking_regionais = RankingRegionais.objects.all().order_by('value')[3:]
+    ranking_regionais = RankingRegionais.objects.all().order_by('-value')
+
 
     return ranking_regionais
 
@@ -245,9 +246,9 @@ def index(request):
             'usuario': usuario,
             'arquivo_foto': arquivo_foto,
             'random_number': random_number,
-            'ambient': ambient
+            'ambient': ambient,
+            'a': 0,
         })
-
 
     elif usuario.role == 'Gerente':
         role = 'Gerente'
@@ -276,6 +277,64 @@ def index(request):
             'ranking_regionais': ranking_regionais,
             'usuario': usuario
         })
+
+    elif usuario.role == 'GRM':
+        role = 'Gerente'
+        ranking = RankingGerentes.objects.get(usuario=usuario)
+
+
+        json = {}
+        total_points = 0
+        max_points = 2400
+
+        for field in ranking._meta.fields:
+            if field.name == 'usuario':
+                json['nome'] = usuario.name
+            elif field.name == 'id':
+                json['id'] = usuario.id
+            else:
+                json[f'{field.name}'] = getattr(ranking, field.name)
+                total_points += getattr(ranking, field.name)
+
+        percentage = int((total_points/max_points)*100)
+
+
+        return render(request, 'ranking_gerentes.html', {
+            'ranking': json,
+            'percentage': percentage,
+            'ranking_regionais': ranking_regionais,
+            'usuario': usuario
+        })
+
+    elif usuario.role == 'GTV':
+        role = 'Gerente'
+        ranking = RankingGerentes.objects.get(usuario=usuario)
+
+
+        json = {}
+        total_points = 0
+        max_points = 2400
+
+        for field in ranking._meta.fields:
+            if field.name == 'usuario':
+                json['nome'] = usuario.name
+            elif field.name == 'id':
+                json['id'] = usuario.id
+            else:
+                json[f'{field.name}'] = getattr(ranking, field.name)
+                total_points += getattr(ranking, field.name)
+
+        percentage = int((total_points/max_points)*100)
+
+
+        return render(request, 'ranking_gerentes.html', {
+            'ranking': json,
+            'percentage': percentage,
+            'ranking_regionais': ranking_regionais,
+            'usuario': usuario
+        })
+     
+    
 
 
 @login_required

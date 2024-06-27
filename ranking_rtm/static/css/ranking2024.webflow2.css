@@ -134,8 +134,8 @@ a {
   color: #e4c6ff;
   text-align: left;
   border: 1px #000;
-  width: 100%;
-  margin-bottom: 5px;
+  width: auto;
+  margin-bottom: 0;
   padding: 0;
   font-family: Exo, sans-serif;
   font-size: 14px;
@@ -150,9 +150,11 @@ a {
   border-style: none none solid solid;
   border-top-right-radius: 40px;
   border-bottom-left-radius: 40px;
+  flex-flow: row;
   justify-content: space-between;
   align-items: stretch;
   width: 100%;
+  margin-bottom: 0;
   padding: 10px 40px 20px;
   display: flex;
   position: relative;
@@ -180,18 +182,25 @@ a {
 .foto_vendedor {
   opacity: 1;
   mix-blend-mode: screen;
-  /*background-image: radial-gradient(circle, rgba(13, 5, 38, .29), #0f0525), url('../images/4LFGB8D_a_man_called_otto_tom_hanks_jpeg.jpg');*/
+  background-image: radial-gradient(circle, rgba(13, 5, 38, .29), #0f0525), url('../images/4LFGB8D_a_man_called_otto_tom_hanks_jpeg.jpg');
   background-position: 0 0, 50%;
   background-size: auto, 160%;
   border-radius: 800px;
-  width: 16vh;
-  height: 15vh;
+  width: 18vh;
+  height: 14vh;
   display: block;
 }
 
 .dashboard-content {
   width: 90%;
   margin-left: 20px;
+}
+
+.name-content {
+  flex-flow: column;
+  justify-content: center;
+  align-items: flex-start;
+  display: flex;
 }
 
 .ic_astronaut {
@@ -214,6 +223,69 @@ a {
   padding: 10px 0 20px 40px;
   display: flex;
   position: relative;
+}
+
+
+.section-ranking-vendedores {
+  background-color: #0b021e;
+}
+
+.ranking-vendedores {
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  margin-top: 20px;
+}
+
+.card-ranking-vendedores {
+  background-image: linear-gradient(212deg, #0b021e 43%, rgba(109, 19, 178, .41));
+  border-bottom: 1px solid #6d13b2;
+  border-left: 1px solid #6d13b2;
+  border-right: 1px #6d13b2;
+  border-radius: 20px;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 10px 40px;
+  display: flex;
+}
+
+.card-ranking-vendedores-atual {
+  background-image: linear-gradient(212deg, #0b021e 43%, rgba(0, 148, 255, .36));
+  border-bottom: 1px solid #0094ff;
+  border-left: 1px solid #0094ff;
+  border-right: 1px #0094ff;
+  border-radius: 20px;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 10px 40px;
+  display: flex;
+}
+
+.text-block-2 {
+  font-size: 6vw;
+  line-height: 6vw;
+}
+
+.ranking-score-1 {
+  margin-right: 20px;
+  font-size: 3vw;
+  line-height: 3vw;
+}
+
+.card-ranking-vendedores-copy {
+  background-image: linear-gradient(212deg, #0b021e 43%, rgba(109, 19, 178, .41));
+  border-bottom: 1px solid #6d13b2;
+  border-left: 1px solid #6d13b2;
+  border-right: 1px #6d13b2;
+  border-radius: 20px;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 10px 40px;
+  display: flex;
 }
 
 .grid {
@@ -255,7 +327,7 @@ a {
 .id-positivacao {
   color: #e4c6ff;
   margin-top: 10px;
-  margin-bottom: 0;
+  margin-bottom: 10px;
   font-family: Exo, sans-serif;
   font-size: 6vh;
   line-height: 5vh;
@@ -292,16 +364,16 @@ a {
 }
 
 .bar-progress {
-  border: 1px solid rgba(228, 198, 255, .46);
+  border: 1px solid rgba(228, 198, 255, .21);
   border-radius: 100px;
   width: 100%;
-  height: 15px;
+  height: 10px;
   position: relative;
   overflow: hidden;
 }
 
 .progress {
-  background-color: #008cff;
+  background-color: #0095ff;
   border-radius: 100px;
   width: 85%;
   position: absolute;
@@ -316,7 +388,7 @@ a {
   align-items: center;
   width: 100%;
   margin-top: 20px;
-  display: flex;
+  display: none;
 }
 
 .percent-number {
@@ -386,13 +458,18 @@ a {
 }
 
 .container-2 {
+  justify-content: space-between;
+  align-items: stretch;
   width: 100%;
   max-width: 100%;
+  display: block;
 }
 
 .image-6 {
   width: 90px;
-  padding-top: 2px;
+  margin-bottom: 11px;
+  margin-right: 242px;
+  padding-top: 0;
 }
 
 .brand {
@@ -400,6 +477,7 @@ a {
   align-items: center;
   height: 100%;
   min-height: 100%;
+  margin-top: -23px;
   padding-top: 8px;
   display: block;
 }
@@ -472,7 +550,7 @@ a {
 
 .dash-regional-content {
   z-index: 1;
-  background-image: linear-gradient(#0b021e 4%, rgba(11, 2, 30, .22) 42%);
+  background-image: linear-gradient(#0b021e, rgba(11, 2, 30, .22) 43%, #0b021e);
   flex-flow: column;
   justify-content: center;
   align-items: center;
@@ -485,11 +563,13 @@ a {
 
 .dash-regional-block1 {
   width: 40%;
+  margin-top: 0;
 }
 
 .dash-regional-block2 {
   z-index: 1;
   position: relative;
+  top: -59px;
 }
 
 .dash-regional-block3 {
@@ -543,7 +623,7 @@ a {
   justify-content: space-between;
   align-items: stretch;
   width: auto;
-  margin-top: 6px;
+  margin-top: 0;
   margin-left: 40px;
   padding: 10px 40px 20px 0;
   display: flex;
@@ -554,6 +634,7 @@ a {
   justify-content: space-between;
   align-items: flex-end;
   width: 100%;
+  margin-top: 20px;
   margin-bottom: 0;
   padding-bottom: 0;
   display: flex;
@@ -561,7 +642,7 @@ a {
 
 .div-block-9 {
   width: 100%;
-  margin-bottom: -70px;
+  margin-bottom: 0;
 }
 
 .lottie-animation-2 {
@@ -581,13 +662,13 @@ a {
   background-position: 50%;
   background-size: cover;
   height: auto;
-  padding: 100px 60px;
+  padding: 60px;
   overflow: hidden;
 }
 
 .ranking-content {
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
   flex-flow: column;
   display: flex;
 }
@@ -612,57 +693,6 @@ a {
   height: 5vw;
   display: flex;
   position: relative;
-}
-
-.section-ranking-vendedores {
-  background-color: #0b021e;
-}
-
-.ranking-vendedores {
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  margin-top: 20px;
-}
-
-.card-ranking-vendedores {
-  background-image: linear-gradient(212deg, #0b021e 43%, rgba(109, 19, 178, .41));
-  border-bottom: 1px solid #6d13b2;
-  border-left: 1px solid #6d13b2;
-  border-right: 1px #6d13b2;
-  border-radius: 20px;
-  flex-flow: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  padding: 10px 40px;
-  display: flex;
-}
-
-.card-ranking-vendedores-atual {
-  background-image: linear-gradient(212deg, #0b021e 43%, rgba(0, 148, 255, .36));
-  border-bottom: 1px solid #0094ff;
-  border-left: 1px solid #0094ff;
-  border-right: 1px #0094ff;
-  border-radius: 20px;
-  flex-flow: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  padding: 10px 40px;
-  display: flex;
-}
-
-.card-ranking-vendedores-copy {
-  background-image: linear-gradient(212deg, #0b021e 43%, rgba(109, 19, 178, .41));
-  border-bottom: 1px solid #6d13b2;
-  border-left: 1px solid #6d13b2;
-  border-right: 1px #6d13b2;
-  border-radius: 20px;
-  flex-flow: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-  padding: 10px 40px;
-  display: flex;
 }
 
 .lottie-animation-3 {
@@ -693,20 +723,20 @@ a {
 .text-block-2 {
   color: #fff;
   font-family: Exo, sans-serif;
-  font-size: 5vw;
-  line-height: 5vw;
+  font-size: 3vw;
+  line-height: 3vw;
 }
 
 .ranking-score-1 {
   color: #b765ff;
   margin-right: 40px;
   font-family: Exo, sans-serif;
-  font-size: 2vw;
-  line-height: 2vw;
+  font-size: 1.5vw;
+  line-height: 1.5vw;
 }
 
 .ranking-2 {
-  padding-left: 100px;
+  padding-left: 180px;
   display: flex;
 }
 
@@ -729,8 +759,12 @@ a {
 }
 
 .ranking-3 {
-  padding-left: 0;
+  padding-left: 120px;
   display: flex;
+}
+
+.nav-menu {
+  margin-top: -18px;
 }
 
 .rocket-cto {
@@ -739,6 +773,7 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 .rocket-spr {
@@ -747,6 +782,7 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 .rocket-nne {
@@ -755,6 +791,7 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 .rocket-rio {
@@ -763,6 +800,7 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 .rocket-spc {
@@ -771,6 +809,7 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 .rocket-sul {
@@ -798,6 +837,7 @@ a {
   background-size: contain;
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 .rocket_spr_ranking {
@@ -884,6 +924,389 @@ a {
   margin-top: 60px;
 }
 
+.section-ranking-vendedores {
+  background-color: #0b021e;
+}
+
+.meta-indicadores {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  display: flex;
+}
+
+.porcentagem-indicadores {
+  color: #e4c6ff;
+  margin-left: 10px;
+  padding-left: 0;
+  font-family: Exo, sans-serif;
+  line-height: 15px;
+}
+
+.text-block-3 {
+  color: #fff;
+  font-family: Exo, sans-serif;
+  font-size: 18px;
+}
+
+.icon-2 {
+  color: #fff;
+}
+
+.dropdown-toggle {
+  vertical-align: baseline;
+  padding-left: 40px;
+  padding-right: 60px;
+  display: block;
+  position: relative;
+}
+
+.filter-dropdown {
+  background-color: #6d13b2;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.div-block-11 {
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  display: flex;
+}
+
+.dropdown-list {
+  background-color: #6d13b2;
+}
+
+.dropdown-list.w--open {
+  background-color: rgba(52, 9, 85, .98);
+  border-radius: 20px;
+  margin-top: 2px;
+}
+
+.dropdown-link {
+  color: #e4c6ff;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-family: Exo, sans-serif;
+  transition: all .4s ease-in-out;
+}
+
+.dropdown-link:hover {
+  color: #fff;
+}
+
+.div-block-12 {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.ranking-vendedores {
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  margin-top: 20px;
+}
+
+.astronaut-ranking {
+  background-color: #7116bf;
+  background-image: url('../images/astronaut_1.webp');
+  background-position: 50% 22%;
+  background-size: 65px;
+  border-radius: 600px;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  display: flex;
+}
+
+.foto_vendedor-ranking {
+  opacity: 1;
+  mix-blend-mode: screen;
+  background-image: radial-gradient(circle, rgba(13, 5, 38, .29), #0f0525), url('../images/4LFGB8D_a_man_called_otto_tom_hanks_jpeg.jpg');
+  background-position: 0 0, 50%;
+  background-size: auto, 160%;
+  border-radius: 800px;
+  width: 40px;
+  height: 40px;
+  margin-top: -1px;
+  display: block;
+  position: absolute;
+}
+
+.card-ranking-vendedores {
+  background-image: linear-gradient(212deg, #0b021e 43%, rgba(109, 19, 178, .41));
+  border-bottom: 1px solid #6d13b2;
+  border-left: 1px solid #6d13b2;
+  border-right: 1px #6d13b2;
+  border-radius: 20px;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 10px 40px;
+  display: flex;
+}
+
+.position-vendedor {
+  color: #e4c6ff;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 20px;
+  font-family: Exo, sans-serif;
+  font-weight: 300;
+  line-height: 38px;
+  display: flex;
+}
+
+.nome-vendedor {
+  color: #e4c6ff;
+  margin-bottom: 5px;
+  font-family: Exo, sans-serif;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.nome-e-pontos {
+  flex-flow: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 20px;
+  display: flex;
+}
+
+.pontos-vendedor {
+  color: #9306ff;
+  font-family: Exo, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.rankings-categoria {
+  grid-column-gap: 4px;
+  grid-row-gap: 4px;
+  flex-flow: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0;
+  margin-left: 15px;
+  display: flex;
+}
+
+.ranking-tv {
+  background-color: rgba(228, 198, 255, .12);
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.ranking-geral {
+  color: #e4c6ff;
+  text-align: center;
+  font-family: Exo, sans-serif;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.vendedor-content {
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+.div-block-15 {
+  flex-flow: row;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+.title-position-ranking {
+  color: #e4c6ff;
+  text-align: left;
+  border: 1px #000;
+  width: auto;
+  margin-bottom: 0;
+  padding: 0;
+  font-family: Exo, sans-serif;
+  font-size: 14px;
+  font-weight: 200;
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.text-block-4 {
+  color: rgba(255, 255, 255, .42);
+  font-family: Exo, sans-serif;
+}
+
+.card-ranking-vendedores-atual {
+  background-image: linear-gradient(212deg, #0b021e 43%, rgba(0, 148, 255, .36));
+  border-bottom: 1px solid #0094ff;
+  border-left: 1px solid #0094ff;
+  border-right: 1px #0094ff;
+  border-radius: 20px;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 10px 40px;
+  display: flex;
+}
+
+.section-ranking-territorios {
+  background-color: #0b021e;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.moon-nne {
+  background-image: url('../images/moon_nne.png');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 111%;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-23deg);
+}
+
+.moon-cto {
+  background-image: url('../images/moon_cto.png');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 111%;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-23deg);
+}
+
+.moon-rio {
+  background-image: url('../images/moon_rio.png');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 111%;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-23deg);
+}
+
+.moon-spc {
+  background-image: url('../images/moon_spc.png');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 111%;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-23deg);
+}
+
+.moon-spr {
+  background-image: url('../images/moon_spr.png');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 111%;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-23deg);
+}
+
+.moon-sul {
+  background-image: url('../images/moon_sul.png');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 111%;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-23deg);
+}
+
+.pontos-territorios {
+  color: #9306ff;
+  font-family: Exo, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.card-ranking-vendedores-copy {
+  background-image: linear-gradient(212deg, #0b021e 43%, rgba(109, 19, 178, .41));
+  border-bottom: 1px solid #6d13b2;
+  border-left: 1px solid #6d13b2;
+  border-right: 1px #6d13b2;
+  border-radius: 20px;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 10px 40px;
+  display: flex;
+}
+
+.pontos-territorio {
+  color: #9306ff;
+  font-family: Exo, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.position-territorio {
+  color: #e4c6ff;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 20px;
+  font-family: Exo, sans-serif;
+  font-weight: 300;
+  line-height: 38px;
+  display: flex;
+}
+
+.nome-territorio {
+  color: #e4c6ff;
+  margin-bottom: 5px;
+  font-family: Exo, sans-serif;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.update-infos {
+  color: rgba(255, 255, 255, .29);
+  text-align: right;
+  width: 100%;
+  margin-top: 5px;
+  font-family: Exo, sans-serif;
+}
+
+.ranking-4 {
+  padding-left: 80px;
+  display: flex;
+}
+
+.ranking-5 {
+  padding-left: 40px;
+  display: flex;
+}
+
+.ranking-6 {
+  padding-left: 0;
+  display: flex;
+}
+
+.button {
+  color: rgba(255, 255, 255, .47);
+  background-color: rgba(109, 19, 178, .51);
+  border: 1px solid #6d13b2;
+  border-radius: 100px;
+  margin-top: 10px;
+  margin-left: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-family: Exo, sans-serif;
+}
+
 @media screen and (max-width: 991px) {
   .background-video {
     background-position: 0 0, 100% 35%;
@@ -923,6 +1346,10 @@ a {
     height: 40vh;
   }
 
+  .foto_vendedor {
+    height: 17vh;
+  }
+
   .dashboard-content {
     width: 100%;
     margin-left: 0;
@@ -935,6 +1362,15 @@ a {
 
   .navbar {
     padding-right: 0;
+  }
+
+  .image-6 {
+    margin-right: 0;
+  }
+
+  .brand {
+    margin-top: -12px;
+    margin-right: -43px;
   }
 
   .nav-link {
@@ -956,6 +1392,8 @@ a {
 
   .dash-regional-content {
     flex-flow: column;
+    justify-content: center;
+    align-items: center;
     height: auto;
     padding: 60px 40px;
   }
@@ -988,6 +1426,7 @@ a {
     flex-flow: column;
     justify-content: space-between;
     align-items: center;
+    margin-top: 0;
   }
 
   .div-block-9 {
@@ -998,19 +1437,24 @@ a {
     padding: 60px 40px;
   }
 
+  .rocket-animate {
+    width: 32vw;
+    height: 9vw;
+  }
+
   .ranking-position-content {
     padding-right: 40px;
   }
 
   .text-block-2 {
-    font-size: 6vw;
-    line-height: 6vw;
+    font-size: 5vw;
+    line-height: 5vw;
   }
 
   .ranking-score-1 {
     margin-right: 20px;
-    font-size: 3vw;
-    line-height: 3vw;
+    font-size: 2vw;
+    line-height: 2vw;
   }
 
   .icon {
@@ -1019,14 +1463,56 @@ a {
 
   .nav-menu {
     background-color: rgba(13, 5, 35, .98);
+    margin-top: -9px;
   }
 
   .menu-button {
     background-color: rgba(109, 19, 178, 0);
+    margin-top: -10px;
   }
 
   .menu-button.w--open {
     background-color: #6d13b2;
+  }
+
+  .dropdown-toggle {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .div-block-12 {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .astronaut-ranking {
+    width: 50px;
+    height: 50px;
+  }
+
+  .card-ranking-vendedores {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .rankings-categoria {
+    margin-top: 5px;
+    margin-left: 0;
+  }
+
+  .div-block-15 {
+    flex-flow: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .card-ranking-vendedores-atual, .card-ranking-vendedores-copy {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .update-infos {
+    margin-top: 0;
   }
 }
 
@@ -1109,26 +1595,14 @@ a {
     padding-right: 20px;
   }
 
-  .card-ranking-vendedores {
-    padding-left: 20px;
-    padding-right: 20px;
+  .dash-regional-block2 {
+    margin-top: 35px;
+    margin-left: 0;
   }
 
-  .card-ranking-vendedores-atual, .card-ranking-vendedores-copy {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .card-ranking-vendedores {
-    flex-flow: column;
+  .div-block-8 {
     justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .card-ranking-vendedores-atual, .card-ranking-vendedores-copy {
-    flex-flow: column;
-    justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .div-block-9 {
@@ -1173,8 +1647,49 @@ a {
     padding-left: 60px;
   }
 
+  .nav-menu {
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-left: 10px;
+  }
+
   .medalha-trancada {
     width: 14vw;
+  }
+
+  .card-ranking-vendedores {
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .ranking-tv {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .div-block-15 {
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .card-ranking-vendedores-atual, .card-ranking-vendedores-copy {
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .update-infos {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  .ranking-4, .ranking-5, .ranking-6 {
+    padding-left: 60px;
   }
 }
 
@@ -1220,8 +1735,8 @@ a {
   }
 
   .name-astronaut {
-    font-size: 5vh;
-    line-height: 5vh;
+    font-size: 4vh;
+    line-height: 4vh;
   }
 
   .foto_vendedor {
@@ -1272,7 +1787,11 @@ a {
   }
 
   .navbar {
-    padding-left: 10px;
+    padding-left: 0;
+  }
+
+  .brand {
+    margin-right: 0;
   }
 
   .dash-regional-content {
@@ -1294,7 +1813,7 @@ a {
 
   .rocket-animate {
     width: 80vw;
-    height: 21vw;
+    height: 18vw;
   }
 
   .lottie-animation-3 {
@@ -1322,8 +1841,80 @@ a {
     padding-left: 20px;
   }
 
+  .ranking-3 {
+    padding-left: 10px;
+  }
+
+  .nav-menu {
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-left: 10px;
+  }
+
   .medalha-trancada {
     width: 30vw;
+  }
+
+  .porcentagem-indicadores {
+    margin-left: 5px;
+    font-size: 12px;
+  }
+
+  .text-block-3 {
+    font-size: 14px;
+  }
+
+  .dropdown-toggle {
+    padding-left: 20px;
+    padding-right: 60px;
+  }
+
+  .div-block-12 {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .astronaut-ranking {
+    width: 60px;
+    height: 60px;
+    padding: 0 0 10px 3px;
+  }
+
+  .foto_vendedor-ranking {
+    width: 40px;
+    height: 40px;
+    margin-top: 4px;
+  }
+
+  .position-vendedor {
+    margin-bottom: 10px;
+  }
+
+  .nome-e-pontos {
+    margin-top: 10px;
+    padding-left: 0;
+  }
+
+  .ranking-geral {
+    font-size: 12px;
+    line-height: 12px;
+  }
+
+  .vendedor-content {
+    flex-flow: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .div-block-15 {
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .ranking-4, .ranking-5, .ranking-6 {
+    padding-left: 0;
   }
 }
 
