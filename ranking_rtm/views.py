@@ -344,8 +344,6 @@ def index(request):
             'usuario': usuario
         })
      
-    
-
 
 @login_required
 def teste_crop_image(request):
