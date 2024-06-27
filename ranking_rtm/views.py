@@ -148,7 +148,7 @@ def generate_ranking():
     for usuario in usuarios:
 
 
-        if usuario.role == 'Gerente':
+        if usuario.role == 'GTM' or usuario.role == 'GTV':
             regional = usuario.regional
             ranking_model = RankingGerentes.objects.get(usuario=usuario)
             for field in ranking_model._meta.fields:
