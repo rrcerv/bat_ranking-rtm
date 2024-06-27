@@ -61,6 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=20, choices=ROLES_CHOICES, default=Vendedor)
 
     regional = models.CharField(max_length=5, choices=REGIONAIS_CHOICES, default=SUL)
+    territorio = models.CharField(max_length=100, default='-')
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
