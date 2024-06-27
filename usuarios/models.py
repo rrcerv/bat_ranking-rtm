@@ -28,10 +28,14 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     Gerente = 'Gerente'
     Vendedor = 'Vendedor'
+    GRM = "GRM"
+    GTV = "GTV"
 
     ROLES_CHOICES = (
         (Vendedor, 'Vendedor'),
         (Gerente, 'Gerente'),
+        (GRM, "GRM"),
+        (GTV, "GTV")
     )
 
     SUL = 'SUL'
