@@ -17,6 +17,8 @@ class RankingGerentes(models.Model):
     parceria = models.IntegerField(null=False, default=0)
     positivacao_parc2 = models.IntegerField(null=False, default=0)
 
+    date = models.DateField(default='2021-01-01')
+
 
 class RankingVendedores(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='usaario_vendedor')
@@ -29,6 +31,8 @@ class RankingVendedores(models.Model):
     base_de_varejos = models.IntegerField(null=False, default=0)
     vol_prime = models.IntegerField(null=False, default=0)
     boost = models.IntegerField(null=False, default=0)
+
+    date = models.DateField(default='2021-01-01')
 
 
 class RankingRegionais(models.Model):
@@ -51,3 +55,5 @@ class RankingRegionais(models.Model):
     regional = models.CharField(max_length=5, choices=REGIONAIS_CHOICES, default=SUL)
     value = models.IntegerField(null=False, blank=False, default=0)
     updatedAt = models.DateTimeField(null=False,blank=False)
+
+    date = models.DateField(default='2021-01-01')
