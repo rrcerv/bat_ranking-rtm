@@ -156,6 +156,8 @@ def generate_ranking():
                     pass
                 elif field.name == 'id':
                     pass
+                elif field.name == 'date':
+                    pass
                 else:
                     points = getattr(ranking_model, field.name)
                     json[regional] += points
