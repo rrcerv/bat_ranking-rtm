@@ -201,6 +201,11 @@ def retrieve_ranking_regionais():
 
     return ranking_regionais
 
+def retrieve_ranking_vendedores_territorio(territorio):
+    usuarios_territorio = User.objects.filter(territorio=territorio)
+
+    return usuarios_territorio
+
 # Create your views here.
 
 @login_required
@@ -245,6 +250,8 @@ def index(request):
 
         random_number = random.randint(1,100)
 
+        ranking_vendedores_territorio = retrieve_ranking_vendedores_territorio(usuario.territorio)
+
         return render(request, 'ranking_vendedores.html', {
             'ranking': json,
             'percentage': percentage,
@@ -254,6 +261,7 @@ def index(request):
             'random_number': random_number,
             'ambient': ambient,
             'a': 0,
+            'ranking_v_t': ranking_vendedores_territorio
         })
 
     elif usuario.role == 'Gerente':

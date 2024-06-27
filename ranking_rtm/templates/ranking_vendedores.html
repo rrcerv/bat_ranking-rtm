@@ -166,18 +166,20 @@
       <div class="div">
         <div class="name-content">
           <div class="title-dashboard">Ranking</div>
-          <div class="name-astronaut">Top Vendedores</div>
+          <div class="name-astronaut">Top Vendedores {{ usuario.territorio }} </div>
         </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
+
+      {% for vendedor in ranking_v_t %}
       <div class="card-ranking-vendedores-atual">
         <div class="vendedor-content">
-          <h1 class="position-vendedor">01º</h1>
+          <h1 class="position-vendedor">{{forloop.counter}}º</h1>
           <div class="astronaut-ranking">
             <div class="foto_vendedor-ranking"></div>
           </div>
           <div class="nome-e-pontos">
-            <div class="nome-vendedor">Givanildo Costa</div>
+            <div class="nome-vendedor">{{vendedor.name}}</div>
             <div class="pontos-vendedor">1.100 pontos</div>
           </div>
         </div>
@@ -185,17 +187,19 @@
           <div class="title-position-ranking">Posição nos rankings</div>
           <div class="rankings-categoria">
             <div class="ranking-tv">
-              <div class="ranking-geral">TV 01</div>
+              <div class="ranking-geral">TV {{vendedor.ranking_tv}}</div>
             </div>
             <div class="ranking-tv">
-              <div class="ranking-geral">BU 10</div>
+              <div class="ranking-geral">BU {{ vendedor.ranking_bu }}</div>
             </div>
             <div class="ranking-tv">
-              <div class="ranking-geral">BR 40</div>
+              <div class="ranking-geral">BR {{ vendedor.ranking_br }}</div>
             </div>
           </div>
         </div>
       </div>
+      {% endfor %}
+
     </div>
   </section>  
 
