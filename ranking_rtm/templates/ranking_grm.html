@@ -11,8 +11,8 @@
   <meta content="Webflow" name="generator">
   <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/webflow.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'css/ranking2024.webflow.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/ranking2024.webflow2.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/ranking2024.webflow.css' %}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -169,6 +169,7 @@
             </div>
           </div>
         </div>
+      <!--
         <div data-w-id="e2bbabac-60d0-feb3-0b75-5b9f372ba0bd" style="opacity:0" class="target">
           <div class="progress-contain">
             <div class="title-progress">PROGRESSO DA META</div>
@@ -187,7 +188,7 @@
               class="medalha-trancada"><img src="{% static 'images/medal_ic.svg' %}" loading="lazy" alt=""
               class="medalha-meta">
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
@@ -198,7 +199,7 @@
       <div class="div">
         <div class="name-content">
           <div class="title-dashboard">Ranking</div>
-          <div class="name-astronaut">Top Vendedores</div>
+          <div class="name-astronaut">Top Vendedores {{usuario.regional}}</div>
         </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
@@ -238,14 +239,14 @@
       <div class="div">
         <div class="name-content">
           <div class="title-dashboard">Ranking</div>
-          <div class="name-astronaut">Top Territórios</div>
+          <div class="name-astronaut">Top Territórios {{usuario.regional}}</div>
         </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
       <div class="card-ranking-vendedores-atual">
         <div class="vendedor-content">
           <h1 class="position-territorio">01º</h1>
-          <div class="moon-cto"></div>
+          <div class="moon-{{usuario.regional|lower}}"></div>
           <div class="nome-e-pontos">
             <div class="nome-territorio">Tv Santa Maria</div>
             <div class="pontos-territorio">1.100 pontos</div>

@@ -773,7 +773,6 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
-  display: none;
 }
 
 .rocket-spr {
@@ -782,7 +781,6 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
-  display: none;
 }
 
 .rocket-nne {
@@ -791,7 +789,6 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
-  display: none;
 }
 
 .rocket-rio {
@@ -800,7 +797,6 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
-  display: none;
 }
 
 .rocket-spc {
@@ -809,7 +805,6 @@ a {
   background-size: cover;
   width: 100%;
   height: 100%;
-  display: none;
 }
 
 .rocket-sul {
@@ -1025,9 +1020,9 @@ a {
 .foto_vendedor-ranking {
   opacity: 1;
   mix-blend-mode: screen;
-  background-image: radial-gradient(circle, rgba(13, 5, 38, .29), #0f0525), url('../images/4LFGB8D_a_man_called_otto_tom_hanks_jpeg.jpg');
+  /*background-image: radial-gradient(circle, rgba(13, 5, 38, .29), #0f0525), url('../images/4LFGB8D_a_man_called_otto_tom_hanks_jpeg.jpg');
   background-position: 0 0, 50%;
-  background-size: auto, 160%;
+  background-size: auto, 160%;*/
   border-radius: 800px;
   width: 40px;
   height: 40px;
