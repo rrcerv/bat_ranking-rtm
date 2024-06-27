@@ -134,6 +134,8 @@ def user_has_photo(matricula):
     else:
         return
 
+# RANKING REGIONAIS
+
 def generate_ranking():
     json = {}
 
@@ -200,6 +202,17 @@ def retrieve_ranking_regionais():
 
 
     return ranking_regionais
+
+# FIM RANKING REGIONAIS
+
+
+# RANKING TERRITÓRIO POR REGIONAL
+def generate_ranking(regional):
+    pass
+
+
+# FIM RANKING TERRITÓRIO POR REGIONAL
+
 
 def retrieve_ranking_vendedores_territorio(territorio):
     usuarios_territorio = User.objects.filter(territorio=territorio)

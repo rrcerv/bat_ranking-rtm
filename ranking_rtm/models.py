@@ -57,3 +57,29 @@ class RankingRegionais(models.Model):
     updatedAt = models.DateTimeField(null=False,blank=False)
 
     date = models.DateField(default='2021-01-01')
+
+
+class RankingTerritorioRegional(models.Model):
+    SUL = 'SUL'
+    SPR = 'SPR'
+    SPC = 'SPC'
+    RIO = 'RIO'
+    CTO = 'CTO'
+    NNE = 'NNE'
+
+    REGIONAIS_CHOICES = (
+        (SUL, 'SUL'),
+        (SPR, 'SPR'),
+        (SPC, 'SPC'),
+        (RIO, 'RIO'),
+        (CTO, 'CTO'),
+        (NNE, 'NNE')
+    )
+
+    regional = models.CharField(max_length=5, choices=REGIONAIS_CHOICES, default=SUL)
+
+    territorio = models.CharField(max_length=100, default='-')
+
+    points = models.IntegerField(null=False, blank=False, default=0)
+
+    date = models.DateField(default='2021-01-01')
