@@ -11,8 +11,10 @@
   <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/webflow.css' %}" rel="stylesheet" type="text/css">
   <link href="{% static 'css/ranking2024.webflow.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'css/ranking2024.webflow2.css' %}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script type="module" src="{% static 'js/gtv.js' %}" ></script>
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script
     type="text/javascript">WebFont.load({ google: { families: ["Exo:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"] } });</script>
@@ -167,6 +169,8 @@
             </div>
           </div>
         </div>
+
+        <!--
         <div data-w-id="e2bbabac-60d0-feb3-0b75-5b9f372ba0bd" style="opacity:0" class="target">
           <div class="progress-contain">
             <div class="title-progress">PROGRESSO DA META</div>
@@ -186,68 +190,117 @@
               class="medalha-meta">
           </div>
         </div>
+          -->
+
+
       </div>
     </div>
   </section>
+
+
+  <section class="section-ranking-vendedores" style="height:100vh;">
+    <div class="div-block-12">
+      <div class="div">
+        <div class="name-content">
+          <div class="title-dashboard">Ranking</div>
+          <div class="name-astronaut">Top Vendedores Território</div>
+        </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
+      </div>
+      <div class="update-infos">Atualizado em 19 junho 2024</div>
+      <div class="card-ranking-vendedores-atual">
+        <div class="vendedor-content">
+          <h1 class="position-vendedor">01º</h1>
+          <div class="astronaut-ranking">
+            <div class="foto_vendedor-ranking"></div>
+          </div>
+          <div class="nome-e-pontos">
+            <div class="nome-vendedor">Givanildo Costa</div>
+            <div class="pontos-vendedor">1.100 pontos</div>
+          </div>
+        </div>
+        <div class="div-block-15">
+          <div class="title-position-ranking">Posição nos rankings</div>
+          <div class="rankings-categoria">
+            <div class="ranking-tv">
+              <div class="ranking-geral">TV 01</div>
+            </div>
+            <div class="ranking-tv">
+              <div class="ranking-geral">BU 10</div>
+            </div>
+            <div class="ranking-tv">
+              <div class="ranking-geral">BR 40</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>  
+
+
+  <section class="section-ranking-territorios" style="height:100vh;">
+    <div class="div-block-12">
+      <div class="div">
+        <div class="name-content">
+          <div class="title-dashboard">Ranking</div>
+          <div class="name-astronaut">Top Territórios {{usuario.regional}}</div>
+        </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
+      </div>
+      <div class="update-infos">Atualizado em 19 junho 2024</div>
+      <div class="card-ranking-vendedores-atual">
+        <div class="vendedor-content">
+          <h1 class="position-territorio">01º</h1>
+          <div class="moon-{{usuario.regional|lower}}"></div>
+          <div class="nome-e-pontos">
+            <div class="nome-territorio">Tv Santa Maria</div>
+            <div class="pontos-territorio">1.100 pontos</div>
+          </div>
+        </div>
+        <div class="div-block-15">
+          <div class="title-position-ranking">Posição nos rankings</div>
+          <div class="rankings-categoria">
+            <div class="ranking-tv">
+              <div class="ranking-geral">TV 01</div>
+            </div>
+            <div class="ranking-tv">
+              <div class="ranking-geral">BU 10</div>
+            </div>
+            <div class="ranking-tv">
+              <div class="ranking-geral">BR 40</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+
+
   <section id="ranking" class="ranking">
     <div class="ranking-content">
       <div class="div">
         <div class="name-content">
           <div class="title-dashboard">Ranking</div>
-          <div class="name-astronaut">Top 3 regionais</div>
+          <div class="name-astronaut">Regionais</div>
         </div><img src="{% static 'images/ic_astrounaut.svg' %}" loading="lazy" alt="" class="ic_astronaut">
-      </div>
-
-      <div class="ranking-1">
-        <div
-          style="-webkit-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
-          class="rocket-animate">
-          <div class="lottie-animation-3" data-w-id="bdb123b1-78b1-8aa4-6ac6-30ead08706e1" data-animation-type="lottie"
-            data-src="{% static 'animations/animation.json' %}" data-loop="1" data-direction="1" data-autoplay="1"
-            data-is-ix2-target="0" data-renderer="svg" data-default-duration="1.334667946972529" data-duration="0">
-          </div>
-          <div class="rocket_{{ ranking_regionais.2.regional|lower }}_ranking"></div>
+      </div>    
+      {% for regional in ranking_regionais %}
+      <div class="rocket-element" style="display:flex;">
+        <div style="-webkit-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="rocket-animate">
+          <div class="lottie-animation-3" data-w-id="bdb123b1-78b1-8aa4-6ac6-30ead08706e1" data-animation-type="lottie" data-src="{% static 'animations/animation.json' %}" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="1.334667946972529" data-duration="0"></div>
+          <div class="rocket_{{ regional.regional|lower }}_ranking"></div>
         </div>
         <div data-w-id="9a1ffd7f-8d5c-b70e-92d4-7f0689ec2055" style="opacity:0" class="ranking-position-content">
-          <div class="ranking-score-1"><span class="id-score1">{{ ranking_regionais.2.value }}</span> pontos</div>
-          <div class="text-block-2">1º</div>
+          <div class="ranking-score-1"><span class="id-score1">{{ regional.value }}</span> pontos</div>
+          <div class="text-block-2">{{forloop.counter}}º</div>
         </div>
       </div>
-
-      <div class="ranking-2">
-        <div
-          style="-webkit-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
-          class="rocket-animate">
-          <div class="lottie-animation-3" data-w-id="f33642ce-01c4-6c0b-3ba7-f6d15aee16ec" data-animation-type="lottie"
-            data-src="{% static 'animations/animation.json' %}" data-loop="1" data-direction="1" data-autoplay="1"
-            data-is-ix2-target="0" data-renderer="svg" data-default-duration="1.334667946972529" data-duration="0">
-          </div>
-          <div class="rocket_{{ ranking_regionais.1.regional|lower }}_ranking"></div>
-        </div>
-        <div data-w-id="f33642ce-01c4-6c0b-3ba7-f6d15aee16ee" style="opacity:0" class="ranking-position-content">
-          <div class="ranking-score-1"><span class="id-score1">{{ ranking_regionais.1.value }}</span> pontos</div>
-          <div class="text-block-2">2º</div>
-        </div>
-      </div>
-
-      <div class="ranking-3">
-        <div
-          style="-webkit-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0px, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
-          class="rocket-animate">
-          <div class="lottie-animation-3" data-w-id="0927f9da-d622-6869-72b6-49dc162074a5" data-animation-type="lottie"
-            data-src="{% static 'animations/animation.json' %}" data-loop="1" data-direction="1" data-autoplay="1"
-            data-is-ix2-target="0" data-renderer="svg" data-default-duration="1.334667946972529" data-duration="0">
-          </div>
-          <div class="rocket_{{ ranking_regionais.0.regional|lower }}_ranking"></div>
-        </div>
-        <div data-w-id="0927f9da-d622-6869-72b6-49dc162074a7" style="opacity:0" class="ranking-position-content">
-          <div class="ranking-score-1"><span class="id-score1">{{ ranking_regionais.0.value }}</span> pontos</div>
-          <div class="text-block-2">3º</div>
-        </div>
-      </div>
+      {% endfor %}
 
     </div>
   </section>
+
+
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=665f53e454d37c916687fa90"
     type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
     crossorigin="anonymous"></script>
