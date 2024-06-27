@@ -268,6 +268,8 @@ def index(request):
                 json['nome'] = usuario.name
             elif field.name == 'id':
                 json['id'] = usuario.id
+            elif field.name == 'date':
+                json['date'] = usuario.date
             else:
                 json[f'{field.name}'] = getattr(ranking, field.name)
                 total_points += getattr(ranking, field.name)
@@ -324,6 +326,8 @@ def index(request):
                 json['nome'] = usuario.name
             elif field.name == 'id':
                 json['id'] = usuario.id
+            elif field.name == 'date':
+                json['date'] = usuario.date
             else:
                 json[f'{field.name}'] = getattr(ranking, field.name)
                 total_points += getattr(ranking, field.name)
