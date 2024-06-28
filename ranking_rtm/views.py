@@ -231,6 +231,7 @@ def gen_ranking_territorios_regional():
     json = {} # JSON TOTAL
 
     for usuario in usuarios:
+        print(usuario.role)
         json_usuario = {} # JSON INDIVIDUAL
         # ITERA SOBRE TODOS OS TERRITORIOS DE GERENTES E ARMAZENA NO JSON OS DADOS DO ACUMULADO
         if usuario.role == 'GRM' or usuario.role == 'GTV':
@@ -241,17 +242,21 @@ def gen_ranking_territorios_regional():
             territorio = usuario.territorio
             total_pontos= ranking_model.pontos_acumulados
             data=ranking_model.date
-            
+
+            print(json)
+            print(usuario.territorio)
             # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
-            if territorio in json and json[territorio]['regional'] == regional:
-                json[territorio]['pontos_acumulados'] = json[territorio]['pontos_acumulados'] + total_pontos
+            if regional+territorio in json:
+                print('if')
+                json[regional+territorio]['pontos_acumulados'] = json[regional+territorio]['pontos_acumulados'] + total_pontos
             # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
             else:
+                print('else')
                 json_usuario['regional'] = regional
                 json_usuario['territorio'] = territorio
                 json_usuario['pontos_acumulados'] = total_pontos
                 json_usuario['data'] = data
-                json[territorio] = json_usuario
+                json[regional+territorio] = json_usuario
                 
         # ITERA SOBRE TODOS OS TERRITÓRIOS DOS VENDEDORES E ARMAZENA NO JSON OS DADOS DO ACUMULADO 
         elif usuario.role == 'Vendedor':
@@ -264,17 +269,14 @@ def gen_ranking_territorios_regional():
             data = ranking_model.date
 
             # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
-            if territorio in json and json[territorio]['regional'] == regional:
-                print('1', usuario, usuario.regional, ranking_model)
-                json[territorio]['pontos_acumulados'] = json[territorio]['pontos_acumulados'] + total_pontos
+            if regional+territorio in json:
+                json[regional+territorio]['pontos_acumulados'] = json[regional+territorio]['pontos_acumulados'] + total_pontos
             # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
             else:
-                print('2', usuario, usuario.regional, ranking_model)
                 json_usuario['regional'] = regional
                 json_usuario['territorio'] = territorio
                 json_usuario['pontos_acumulados'] = total_pontos
                 json_usuario['data'] = data
-                print(json_usuario)
                 json[regional+territorio] = json_usuario
     
     for key, value in json.items():
@@ -339,6 +341,39 @@ def retrieve_ranking_vendedores_territorio(territorio, regional):
 
     return lista
 
+def retrieve_ranking_vendedores_bu(regional):
+    condition2=Q(regional=regional)
+    usuarios_territorio = User.objects.filter(condition2)
+    lista=[]
+    for usuario in usuarios_territorio:
+        if (usuario.role == 'Vendedor'):
+            json_usuario = {}
+
+            for field in usuario._meta.fields:
+                if field.name == 'password':
+                    pass
+                attr = getattr(usuario, field.name)
+                json_usuario[field.name] = attr
+
+            try:
+                ranking_model = RankingVendedores.objects.get(usuario=usuario)
+
+                json_usuario['pontos_acumulados'] = ranking_model.pontos_acumulados
+                json_usuario['ranking_bu'] = ranking_model.ranking_bu
+                json_usuario['ranking_br'] = ranking_model.ranking_br
+                json_usuario['ranking_tv'] = ranking_model.ranking_tv
+            except:
+                json_usuario['pontos_acumulados'] = 0
+            
+            lista.append(json_usuario)
+        else:
+            pass
+        
+    lista.sort(key=get_pontos, reverse=True)
+
+    return lista
+
+
 # Create your views here.
 
 @login_required
@@ -350,7 +385,6 @@ def index(request):
 
 
     gen_ranking_territorios_regional()
-    print(usuario.regional)
     ranking_t_r = retrieve_ranking_territorios_regional(regional=usuario.regional)
 
     if usuario.role == 'Vendedor':
@@ -437,6 +471,9 @@ def index(request):
         role = 'Gerente'
         ranking = RankingGerentes.objects.get(usuario=usuario)
 
+        ranking_v_bu = retrieve_ranking_vendedores_bu(usuario.regional)
+        print(ranking_v_bu)
+
 
         json = {}
         total_points = 0
@@ -460,13 +497,16 @@ def index(request):
             'ranking': json,
             'percentage': percentage,
             'ranking_regionais': ranking_regionais,
-            'usuario': usuario
+            'usuario': usuario,
+            'ranking_v_bu':ranking_v_bu,
+            'ranking_t_r':ranking_t_r
         })
 
     elif usuario.role == 'GTV':
         role = 'Gerente'
         ranking = RankingGerentes.objects.get(usuario=usuario)
 
+        ranking_v_t = retrieve_ranking_vendedores_territorio(usuario.territorio, usuario.regional)
 
         json = {}
         total_points = 0
@@ -490,7 +530,9 @@ def index(request):
             'ranking': json,
             'percentage': percentage,
             'ranking_regionais': ranking_regionais,
-            'usuario': usuario
+            'usuario': usuario,
+            'ranking_v_t': ranking_v_t,
+            'ranking_t_r': ranking_t_r
         })
      
 

@@ -203,32 +203,36 @@
         </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
+
+      {% for object in ranking_v_bu %}
       <div class="card-ranking-vendedores-atual">
         <div class="vendedor-content">
-          <h1 class="position-vendedor">01º</h1>
+          <h1 class="position-vendedor">0{{forloop.counter}}º</h1>
           <div class="astronaut-ranking">
             <div class="foto_vendedor-ranking"></div>
           </div>
           <div class="nome-e-pontos">
-            <div class="nome-vendedor">Givanildo Costa</div>
-            <div class="pontos-vendedor">1.100 pontos</div>
+            <div class="nome-vendedor">{{object.name}}</div>
+            <div class="pontos-vendedor">{{object.pontos_acumulados}} pontos</div>
           </div>
         </div>
         <div class="div-block-15">
           <div class="title-position-ranking">Posição nos rankings</div>
           <div class="rankings-categoria">
             <div class="ranking-tv">
-              <div class="ranking-geral">TV 01</div>
+              <div class="ranking-geral">TV {{object.ranking_tv}}</div>
             </div>
             <div class="ranking-tv">
-              <div class="ranking-geral">BU 10</div>
+              <div class="ranking-geral">BU {{object.ranking_bu}}</div>
             </div>
             <div class="ranking-tv">
-              <div class="ranking-geral">BR 40</div>
+              <div class="ranking-geral">BR {{object.ranking_br}}</div>
             </div>
           </div>
         </div>
       </div>
+      {% endfor %}
+
     </div>
   </section>  
 
@@ -243,30 +247,37 @@
         </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
+
+      {% for object in ranking_t_r %}
       <div class="card-ranking-vendedores-atual">
         <div class="vendedor-content">
-          <h1 class="position-territorio">01º</h1>
+          <h1 class="position-territorio">0{{forloop.counter}}º</h1>
           <div class="moon-{{usuario.regional|lower}}"></div>
           <div class="nome-e-pontos">
-            <div class="nome-territorio">Tv Santa Maria</div>
-            <div class="pontos-territorio">1.100 pontos</div>
+            <div class="nome-territorio">{{object.territorio}}</div>
+            <div class="pontos-territorio">{{object.pontos_acumulados}} pontos</div>
           </div>
         </div>
+        <!--
         <div class="div-block-15">
           <div class="title-position-ranking">Posição nos rankings</div>
           <div class="rankings-categoria">
             <div class="ranking-tv">
-              <div class="ranking-geral">TV 01</div>
+              <div class="ranking-geral">TV {{object.ranking_tv}}</div>
             </div>
             <div class="ranking-tv">
-              <div class="ranking-geral">BU 10</div>
+              <div class="ranking-geral">BU {{objec</div>
             </div>
             <div class="ranking-tv">
               <div class="ranking-geral">BR 40</div>
             </div>
           </div>
-        </div>
+        </div> -->
+
       </div>
+      {% endfor %}
+
+
       </div>
     </div>
   </section>
