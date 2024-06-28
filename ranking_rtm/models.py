@@ -5,7 +5,6 @@ from usuarios.models import User
 class RankingGerentes(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ranking_gerente')
 
-
     pts_ytd_direto = models.IntegerField(null=False, default=0)
     efetividade = models.IntegerField(null=False, default=0)
     faturamento = models.IntegerField(null=False, default=0)
