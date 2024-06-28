@@ -180,7 +180,7 @@
           </div>
           <div class="nome-e-pontos">
             <div class="nome-vendedor">{{vendedor.name}}</div>
-            <div class="pontos-vendedor">1.100 pontos</div>
+            <div class="pontos-vendedor">{{vendedor.pontos_acumulados}} pontos</div>
           </div>
         </div>
         <div class="div-block-15">
@@ -212,15 +212,19 @@
         </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
+
+      {% for territorio in ranking_t_r %}
       <div class="card-ranking-vendedores-atual">
         <div class="vendedor-content">
-          <h1 class="position-territorio">01º</h1>
-          <div class="moon-cto"></div>
+          <h1 class="position-territorio">{{forloop.counter}}º</h1>
+          <div class="moon-{{territorio.regional|lower}}"></div>
           <div class="nome-e-pontos">
-            <div class="nome-territorio">Tv Santa Maria</div>
-            <div class="pontos-territorio">1.100 pontos</div>
+            <div class="nome-territorio">{{territorio.territorio}}</div>
+            <div class="pontos-territorio">{{territorio.points}} pontos</div>
           </div>
         </div>
+
+      <!-- 
         <div class="div-block-15">
           <div class="title-position-ranking">Posição nos rankings</div>
           <div class="rankings-categoria">
@@ -234,8 +238,14 @@
               <div class="ranking-geral">BR 40</div>
             </div>
           </div>
-        </div>
+
+        </div> -->
+
+        
       </div>
+      {% endfor %}
+
+
       </div>
     </div>
   </section>

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import RankingGerentes, RankingVendedores, RankingRegionais, User
+from .models import RankingGerentes, RankingVendedores, RankingRegionais, User, RankingTerritorioRegional
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.db.models import Q
@@ -134,6 +134,7 @@ def user_has_photo(matricula):
     else:
         return
 
+
 # RANKING REGIONAIS
 
 def generate_ranking():
@@ -148,36 +149,45 @@ def generate_ranking():
     usuarios = User.objects.all()
 
     for usuario in usuarios:
-
-
-        if usuario.role == 'GTM' or usuario.role == 'GTV':
-            regional = usuario.regional
+        regional = usuario.regional
+        
+        if usuario.role == 'GRM' or usuario.role == 'GTV':
             ranking_model = RankingGerentes.objects.get(usuario=usuario)
-            for field in ranking_model._meta.fields:
-                if field.name == 'usuario':
-                    pass
-                elif field.name == 'id':
-                    pass
-                elif field.name == 'date':
-                    pass
-                else:
-                    points = getattr(ranking_model, field.name)
-                    json[regional] += points
-                
-
+            json[regional]+=ranking_model.pontos_acumulados
+         
         elif usuario.role == 'Vendedor':
-            regional=usuario.regional
             ranking_model = RankingVendedores.objects.get(usuario=usuario)
-            for field in ranking_model._meta.fields:
-                if field.name == 'usuario':
-                    pass
-                elif field.name == 'id':
-                    pass
-                elif field.name == 'date':
-                    pass
-                else:
-                    points = getattr(ranking_model, field.name)
-                    json[regional] += points
+            json[regional]+=ranking_model.pontos_acumulados
+
+        # LÓGICA DE LOOP PELAS VARIÁVEIS DE KPI PARA ACUMULAR OS PONTOS -- EM DESUSO POR JÁ TER OS PONTOS ACUMULADOS
+        #if usuario.role == 'GTM' or usuario.role == 'GTV':
+        #    regional = usuario.regional
+        #    ranking_model = RankingGerentes.objects.get(usuario=usuario)
+        #    for field in ranking_model._meta.fields:
+        #        if field.name == 'usuario':
+        #            pass
+        #        elif field.name == 'id':
+        #            pass
+        #        elif field.name == 'date':
+        #            pass
+        #        else:
+        #            points = getattr(ranking_model, field.name)
+        #            json[regional] += points
+        #        
+#
+        #elif usuario.role == 'Vendedor':
+        #    regional=usuario.regional
+        #    ranking_model = RankingVendedores.objects.get(usuario=usuario)
+        #    for field in ranking_model._meta.fields:
+        #        if field.name == 'usuario':
+        #            pass
+        #        elif field.name == 'id':
+        #            pass
+        #        elif field.name == 'date':
+        #            pass
+        #        else:
+        #            points = getattr(ranking_model, field.name)
+        #            json[regional] += points
 
     current_time = timezone.now()
 
@@ -207,17 +217,123 @@ def retrieve_ranking_regionais():
 
 
 # RANKING TERRITÓRIO POR REGIONAL
-def generate_ranking(regional):
-    pass
 
+# ESSA FUNÇÃO GERA O RANKING
+def gen_ranking_territorios_regional():
+    objetos = RankingTerritorioRegional.objects.all()
+
+    for objeto in objetos:
+        objeto.delete()
+    
+    usuarios = User.objects.all()
+
+    json = {} # JSON TOTAL
+
+    for usuario in usuarios:
+        json_usuario = {} # JSON INDIVIDUAL
+
+        # ITERA SOBRE TODOS OS TERRITORIOS DE GERENTES E ARMAZENA NO JSON OS DADOS DO ACUMULADO
+        if usuario.role == 'GRM' or usuario.role == 'GTV':
+            condition1= Q(usuario=usuario)
+            ranking_model = RankingGerentes.objects.get(condition1)
+
+            regional = usuario.regional
+            territorio = usuario.territorio
+            total_pontos= ranking_model.pontos_acumulados
+            data=ranking_model.date
+            
+            # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
+            if territorio in json and json[territorio]['regional'] == regional:
+                json[territorio]['pontos_acumulados'] = json[territorio]['pontos_acumulados'] + total_pontos
+            # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
+            else:
+                json_usuario['regional'] = regional
+                json_usuario['territorio'] = territorio
+                json_usuario['pontos_acumulados'] = total_pontos
+                json_usuario['data'] = data
+                json[territorio] = json_usuario
+                
+        # ITERA SOBRE TODOS OS TERRITÓRIOS DOS VENDEDORES E ARMAZENA NO JSON OS DADOS DO ACUMULADO 
+        elif usuario.role == 'Vendedor':
+            condition1 = Q(usuario=usuario)
+            ranking_model = RankingVendedores.objects.get(condition1)
+
+            regional = usuario.regional
+            territorio = usuario.territorio
+            total_pontos = ranking_model.pontos_acumulados
+            data = ranking_model.date
+
+            # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
+            if territorio in json and json[territorio]['regional'] == regional:
+                json[territorio]['pontos_acumulados'] = json[territorio]['pontos_acumulados'] + total_pontos
+            # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
+            else:
+                json_usuario['regional'] = regional
+                json_usuario['territorio'] = territorio
+                json_usuario['pontos_acumulados'] = total_pontos
+                json_usuario['data'] = data
+                json[territorio] = json_usuario
+    
+    for key, value in json.items():
+
+        try:
+            condition1 = Q(territorio=value['territorio'])
+            condition2 = Q(regional = value['regional'])
+            condition3 = Q(date= value['data'])
+            object = RankingTerritorioRegional.objects.get(condition1 & condition2 & condition3)
+
+            object.territorio = value['territorio']
+            object.regional = value['regional']
+            object.points = value['pontos_acumulados']
+            object.date = value['data']
+            object.save()
+
+        except:
+            object = RankingTerritorioRegional(territorio=value['territorio'], regional=value['regional'], points=value['pontos_acumulados'], date=value['data'])
+            object.save()
+
+def retrieve_ranking_territorios_regional(regional):
+    objects = RankingTerritorioRegional.objects.filter(regional=regional).order_by('-points')
+    
+    return objects
 
 # FIM RANKING TERRITÓRIO POR REGIONAL
 
+def get_pontos(element):
+    return element['pontos_acumulados']
 
-def retrieve_ranking_vendedores_territorio(territorio):
-    usuarios_territorio = User.objects.filter(territorio=territorio)
+def retrieve_ranking_vendedores_territorio(territorio, regional):
+    condition1=Q(territorio=territorio)
+    condition2=Q(regional=regional)
+    usuarios_territorio = User.objects.filter(condition1, condition2)
+    lista=[]
+    for usuario in usuarios_territorio:
+        if (usuario.role == 'Vendedor'):
+            json_usuario = {}
 
-    return usuarios_territorio
+            for field in usuario._meta.fields:
+                if field.name == 'password':
+                    pass
+                attr = getattr(usuario, field.name)
+                json_usuario[field.name] = attr
+
+            try:
+                ranking_model = RankingVendedores.objects.get(usuario=usuario)
+
+                json_usuario['pontos_acumulados'] = ranking_model.pontos_acumulados
+                json_usuario['ranking_bu'] = ranking_model.ranking_bu
+                json_usuario['ranking_br'] = ranking_model.ranking_br
+                json_usuario['ranking_tv'] = ranking_model.ranking_tv
+            except:
+                json_usuario['pontos_acumulados'] = 0
+            
+            lista.append(json_usuario)
+        else:
+            pass
+        
+    lista.sort(key=get_pontos, reverse=True)
+
+    return lista
 
 # Create your views here.
 
@@ -227,6 +343,10 @@ def index(request):
     ambient = env('AMBIENT') 
 
     ranking_regionais = retrieve_ranking_regionais()
+
+
+    gen_ranking_territorios_regional()
+    ranking_t_r = retrieve_ranking_territorios_regional(regional=usuario.regional)
 
     if usuario.role == 'Vendedor':
         role = 'Vendedor'
@@ -263,7 +383,7 @@ def index(request):
 
         random_number = random.randint(1,100)
 
-        ranking_vendedores_territorio = retrieve_ranking_vendedores_territorio(usuario.territorio)
+        ranking_vendedores_territorio = retrieve_ranking_vendedores_territorio(usuario.territorio, usuario.regional)
 
         return render(request, 'ranking_vendedores.html', {
             'ranking': json,
@@ -274,7 +394,8 @@ def index(request):
             'random_number': random_number,
             'ambient': ambient,
             'a': 0,
-            'ranking_v_t': ranking_vendedores_territorio
+            'ranking_v_t': ranking_vendedores_territorio,
+            'ranking_t_r': ranking_t_r
         })
 
     elif usuario.role == 'Gerente':

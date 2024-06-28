@@ -63,9 +63,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     regional = models.CharField(max_length=5, choices=REGIONAIS_CHOICES, default=SUL)
     territorio = models.CharField(max_length=100, default='-')
 
-    ranking_tv = models.IntegerField(null=False, blank=False, default=0)
-    ranking_bu = models.IntegerField(null=False, blank=False, default=0)
-    ranking_br = models.IntegerField(null=False, blank=False, default=0)
+    #ranking_tv = models.IntegerField(null=False, blank=False, default=0)
+    #ranking_bu = models.IntegerField(null=False, blank=False, default=0)
+    #ranking_br = models.IntegerField(null=False, blank=False, default=0)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
