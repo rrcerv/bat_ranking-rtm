@@ -27,15 +27,15 @@ class RankingGerentes(models.Model):
 
 class RankingVendedores(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ranking_vendedor')
+
     efetividade = models.IntegerField(null=False, default=0)
-    positivao_parcial = models.IntegerField(null=False, default=0)
+    faturamento = models.IntegerField(null=False, default=0)
+    positivacao = models.IntegerField(null=False, default=0)
+    cobertura_vol_prime = models.IntegerField(null=False, default=0)
     adimplencia_prime = models.IntegerField(null=False, default=0)
     id_ulp = models.IntegerField(null=False, default=0)
-    faturamento_parc = models.IntegerField(null=False, default=0)
-    digital = models.IntegerField(null=False, default=0)
-    base_de_varejos = models.IntegerField(null=False, default=0)
-    vol_prime = models.IntegerField(null=False, default=0)
-    boost = models.IntegerField(null=False, default=0)
+    base = models.IntegerField(null=False, default=0)
+
 
     pontos_acumulados = models.IntegerField(null=False, blank=False, default=0)
 
