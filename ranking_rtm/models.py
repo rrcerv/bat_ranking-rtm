@@ -22,9 +22,6 @@ class RankingGerentes(models.Model):
     date = models.DateField(default='2021-01-01')
 
 
-
-
-
 class RankingVendedores(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ranking_vendedor')
 

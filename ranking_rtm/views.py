@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import RankingGerentes, RankingVendedores, RankingRegionais, User, RankingTerritorioRegional
+from .models import RankingGerentes, RankingVendedores, RankingRegionais, User, RankingTerritorioRegional, User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.db.models import Q
@@ -15,6 +15,7 @@ import base64
 from PIL import Image # PRECISA INSTALAR NO SERVIDOR
 from io import BytesIO
 import random
+import pandas as pd
 
 # CRIPTOGRAFIA -- PRECISA INSTALAR NO SERVIDOR pycryptodome
 from Crypto.Random import get_random_bytes
@@ -231,7 +232,6 @@ def gen_ranking_territorios_regional():
 
     for usuario in usuarios:
         json_usuario = {} # JSON INDIVIDUAL
-
         # ITERA SOBRE TODOS OS TERRITORIOS DE GERENTES E ARMAZENA NO JSON OS DADOS DO ACUMULADO
         if usuario.role == 'GRM' or usuario.role == 'GTV':
             condition1= Q(usuario=usuario)
@@ -265,14 +265,17 @@ def gen_ranking_territorios_regional():
 
             # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
             if territorio in json and json[territorio]['regional'] == regional:
+                print('1', usuario, usuario.regional, ranking_model)
                 json[territorio]['pontos_acumulados'] = json[territorio]['pontos_acumulados'] + total_pontos
             # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
             else:
+                print('2', usuario, usuario.regional, ranking_model)
                 json_usuario['regional'] = regional
                 json_usuario['territorio'] = territorio
                 json_usuario['pontos_acumulados'] = total_pontos
                 json_usuario['data'] = data
-                json[territorio] = json_usuario
+                print(json_usuario)
+                json[regional+territorio] = json_usuario
     
     for key, value in json.items():
 
@@ -291,6 +294,7 @@ def gen_ranking_territorios_regional():
         except:
             object = RankingTerritorioRegional(territorio=value['territorio'], regional=value['regional'], points=value['pontos_acumulados'], date=value['data'])
             object.save()
+
 
 def retrieve_ranking_territorios_regional(regional):
     objects = RankingTerritorioRegional.objects.filter(regional=regional).order_by('-points')
@@ -346,6 +350,7 @@ def index(request):
 
 
     gen_ranking_territorios_regional()
+    print(usuario.regional)
     ranking_t_r = retrieve_ranking_territorios_regional(regional=usuario.regional)
 
     if usuario.role == 'Vendedor':
@@ -442,6 +447,8 @@ def index(request):
                 json['nome'] = usuario.name
             elif field.name == 'id':
                 json['id'] = usuario.id
+            elif field.name == 'date':
+                json['date'] = getattr(ranking, 'date')
             else:
                 json[f'{field.name}'] = getattr(ranking, field.name)
                 total_points += getattr(ranking, field.name)
@@ -529,3 +536,82 @@ def upload_user_image(request):
         return JsonResponse({'Response': 'Metodo nao autorizado'}, status=418)
 
 
+
+
+# API PARA FAZER UPDATE DA BASE.
+# O ARQUIVO EXCEL DEVE SER UM MERGE ENTRE AS PLANILHAS DE DATA DE NASCIMENTO E RANKINGS
+@login_required
+def update_base(request):
+    result=pd.read_excel('output.xlsx')
+
+    for line in result.iterrows():
+        line = line[1]
+
+        # USER
+        matricula = line['Matricula']
+        regional = line['BU_x'].strip().upper()
+        territorio = line['TV']
+
+        if(territorio == '-'):
+            continue
+        else:
+            pass
+
+        if line['FUNÇÃO'] == 'VENDEDOR':
+            role = line['FUNÇÃO'].title()
+        else:
+            role = line['FUNÇÃO'].strip().upper()
+
+        dia = str(line['dia']).zfill(2)
+        mes = str(line['mês']).zfill(2)
+        ano = str(line['ano']).zfill(2)
+
+        name=line['RECURSO']
+
+        password= dia+mes+ano
+        print(name, matricula, role, regional, territorio, password)
+
+        try:
+            object_user = User(name=name, matricula = matricula, regional=regional, territorio=territorio, role=role)
+            object_user.set_password(password)
+            object_user.save()
+            last_user = object_user
+        except:
+            print('Fail')
+            pass
+        
+
+        # SETANDO RANKING
+        if role == 'GRM' or role == 'GTV':
+            pts_ytd_direto = line['PTS YTD DIRETO']
+            efetividade = line['EFETIVIDADE']
+            faturamento = line['FATURAMENTO']
+            positivacao = line['POSITIVAÇÃO']
+            cobertura_vol_prime = line['COBERTURA DE VOLUME PRIME']
+            adimplencia_prime = line['ADIMPLÊNCIA PRIME']
+            id_ulp = line['ID ULP']
+            base= line['BASE']
+            pts_share_ka_cnv = line['PTS SHARE KA CNV']
+            pts_divers_portfolio = ['PTS DIVERS. PORTFÓLIO PARCERIA']
+            boost = ['BOOST']
+            print(object_user, pts_ytd_direto, efetividade, faturamento, positivacao, cobertura_vol_prime, adimplencia_prime, id_ulp, base)
+            object_ranking = RankingGerentes(usuario=object_user, pts_ytd_direto=pts_ytd_direto, efetividade=efetividade,
+                            faturamento=faturamento, positivacao=positivacao, cobertura_vol_prime=cobertura_vol_prime,
+                            adimplencia_prime=adimplencia_prime, id_ulp=id_ulp, base=base, pts_share_ka_cnv=pts_share_ka_cnv,
+                            pts_divers_portfolio=pts_divers_portfolio, boost=boost)
+            object_ranking.save()
+
+        elif role=='Vendedor':
+            efetividade = line['EFETIVIDADE']
+            faturamento = line['FATURAMENTO']
+            positivacao = line['POSITIVAÇÃO']
+            cobertura_vol_prime = line['COBERTURA DE VOLUME PRIME']
+            adimplencia_prime = line['ADIMPLÊNCIA PRIME']
+            id_ulp = line['ID ULP']
+            base= line['BASE']
+            object_ranking = RankingVendedores(usuario=object_user, efetividade=efetividade, faturamento=faturamento,
+                                               positivacao=positivacao, cobertura_vol_prime=cobertura_vol_prime,
+                                               adimplencia_prime=adimplencia_prime, id_ulp=id_ulp, base=base)
+            object_ranking.save()
+
+    return JsonResponse({'Response': 'OK'})
