@@ -316,7 +316,8 @@ def retrieve_ranking_vendedores_territorio(territorio, regional):
     lista=[]
 
     if env('AMBIENT') == 'prod':
-        cache_key = f'rankingVT_{regional}_{territorio.replace(' ', '_')}'
+        ter_for_cache = territorio.replace(' ', '_')
+        cache_key = f'rankingVT_{regional}_{ter_for_cache}'
         cache_time = 43200
         data = cache.get(cache_key)
         if data:
