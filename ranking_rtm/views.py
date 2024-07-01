@@ -382,6 +382,8 @@ def retrieve_ranking_vendedores_bu(regional):
                 else:
                     pass
             cache.set(cache_key, lista, cache_time)
+        else:
+            lista=data
 
 
     else:
