@@ -314,33 +314,73 @@ def retrieve_ranking_vendedores_territorio(territorio, regional):
     condition2=Q(regional=regional)
     usuarios_territorio = User.objects.filter(condition1, condition2)
     lista=[]
-    for usuario in usuarios_territorio:
-        if (usuario.role == 'Vendedor'):
-            json_usuario = {}
 
-            for field in usuario._meta.fields:
-                if field.name == 'password':
-                    pass
-                attr = getattr(usuario, field.name)
-                json_usuario[field.name] = attr
-
-            try:
-                ranking_models = RankingVendedores.objects.filter(usuario=usuario)
-                json_usuario['pontos_acumulados'] = 0
-                
-                for ranking_model in ranking_models:
-                    json_usuario['pontos_acumulados'] = json_usuario['pontos_acumulados'] + ranking_model.pontos_acumulados
-                    json_usuario['ranking_bu'] = ranking_model.ranking_bu
-                    json_usuario['ranking_br'] = ranking_model.ranking_br
-                    json_usuario['ranking_tv'] = ranking_model.ranking_tv
-
-            except:
-                json_usuario['pontos_acumulados'] = 0
-            
-            lista.append(json_usuario)
+    if env('AMBIENT') == 'prod':
+        cache_key = f'rankingVT_{regional}_{territorio}'
+        cache_time = 43200
+        data = cache.get(cache_key)
+        if data:
+            lista=data
         else:
-            pass
-        
+            for usuario in usuarios_territorio:
+                if (usuario.role == 'Vendedor'):
+                    json_usuario = {}
+
+                    for field in usuario._meta.fields:
+                        if field.name == 'password':
+                            pass
+                        attr = getattr(usuario, field.name)
+                        json_usuario[field.name] = attr
+
+                    try:
+                        ranking_models = RankingVendedores.objects.filter(usuario=usuario)
+                        json_usuario['pontos_acumulados'] = 0
+
+                        for ranking_model in ranking_models:
+                            json_usuario['pontos_acumulados'] = json_usuario['pontos_acumulados'] + ranking_model.pontos_acumulados
+                            json_usuario['ranking_bu'] = ranking_model.ranking_bu
+                            json_usuario['ranking_br'] = ranking_model.ranking_br
+                            json_usuario['ranking_tv'] = ranking_model.ranking_tv
+
+                    except:
+                        json_usuario['pontos_acumulados'] = 0
+
+                    lista.append(json_usuario)
+                else:
+                    pass
+            cache.set(cache_key, lista, 43200)
+    
+    
+    else:
+        for usuario in usuarios_territorio:
+            if (usuario.role == 'Vendedor'):
+                json_usuario = {}
+
+                for field in usuario._meta.fields:
+                    if field.name == 'password':
+                        pass
+                    attr = getattr(usuario, field.name)
+                    json_usuario[field.name] = attr
+
+                try:
+                    ranking_models = RankingVendedores.objects.filter(usuario=usuario)
+                    json_usuario['pontos_acumulados'] = 0
+
+                    for ranking_model in ranking_models:
+                        json_usuario['pontos_acumulados'] = json_usuario['pontos_acumulados'] + ranking_model.pontos_acumulados
+                        json_usuario['ranking_bu'] = ranking_model.ranking_bu
+                        json_usuario['ranking_br'] = ranking_model.ranking_br
+                        json_usuario['ranking_tv'] = ranking_model.ranking_tv
+
+                except:
+                    json_usuario['pontos_acumulados'] = 0
+
+                lista.append(json_usuario)
+            else:
+                pass
+
+
+
     lista.sort(key=get_pontos, reverse=True)
 
     return lista
