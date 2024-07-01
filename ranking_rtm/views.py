@@ -233,7 +233,6 @@ def gen_ranking_territorios_regional():
     json = {} # JSON TOTAL
 
     for usuario in usuarios:
-        print(usuario.role)
         json_usuario = {} # JSON INDIVIDUAL
         # ITERA SOBRE TODOS OS TERRITORIOS DE GERENTES E ARMAZENA NO JSON OS DADOS DO ACUMULADO
         if usuario.role == 'GRM' or usuario.role == 'GTV':
@@ -246,15 +245,11 @@ def gen_ranking_territorios_regional():
                 total_pontos= ranking_model.pontos_acumulados
                 data=ranking_model.date
 
-                print(json)
-                print(usuario.territorio)
                 # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
                 if regional+territorio in json:
-                    print('if')
                     json[regional+territorio]['pontos_acumulados'] = json[regional+territorio]['pontos_acumulados'] + total_pontos
                 # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
                 else:
-                    print('else')
                     json_usuario['regional'] = regional
                     json_usuario['territorio'] = territorio
                     json_usuario['pontos_acumulados'] = total_pontos
@@ -329,12 +324,15 @@ def retrieve_ranking_vendedores_territorio(territorio, regional):
                 json_usuario[field.name] = attr
 
             try:
-                ranking_model = RankingVendedores.objects.get(usuario=usuario)
+                ranking_models = RankingVendedores.objects.filter(usuario=usuario)
+                json_usuario['pontos_acumulados'] = 0
+                
+                for ranking_model in ranking_models:
+                    json_usuario['pontos_acumulados'] = json_usuario['pontos_acumulados'] + ranking_model.pontos_acumulados
+                    json_usuario['ranking_bu'] = ranking_model.ranking_bu
+                    json_usuario['ranking_br'] = ranking_model.ranking_br
+                    json_usuario['ranking_tv'] = ranking_model.ranking_tv
 
-                json_usuario['pontos_acumulados'] = ranking_model.pontos_acumulados
-                json_usuario['ranking_bu'] = ranking_model.ranking_bu
-                json_usuario['ranking_br'] = ranking_model.ranking_br
-                json_usuario['ranking_tv'] = ranking_model.ranking_tv
             except:
                 json_usuario['pontos_acumulados'] = 0
             
@@ -350,6 +348,7 @@ def retrieve_ranking_vendedores_bu(regional):
     condition2=Q(regional=regional)
     usuarios_territorio = User.objects.filter(condition2)
     lista=[]
+
     for usuario in usuarios_territorio:
         if (usuario.role == 'Vendedor'):
             json_usuario = {}
@@ -360,13 +359,16 @@ def retrieve_ranking_vendedores_bu(regional):
                 attr = getattr(usuario, field.name)
                 json_usuario[field.name] = attr
 
-            try:
-                ranking_model = RankingVendedores.objects.get(usuario=usuario)
+            json_usuario['pontos_acumulados'] = 0
 
-                json_usuario['pontos_acumulados'] = ranking_model.pontos_acumulados
-                json_usuario['ranking_bu'] = ranking_model.ranking_bu
-                json_usuario['ranking_br'] = ranking_model.ranking_br
-                json_usuario['ranking_tv'] = ranking_model.ranking_tv
+            try:
+                rankings_model = RankingVendedores.objects.filter(usuario=usuario)
+
+                for ranking_model in rankings_model:
+                    json_usuario['pontos_acumulados'] = json_usuario['pontos_acumulados'] + ranking_model.pontos_acumulados
+                    json_usuario['ranking_bu'] = ranking_model.ranking_bu
+                    json_usuario['ranking_br'] = ranking_model.ranking_br
+                    json_usuario['ranking_tv'] = ranking_model.ranking_tv
             except:
                 json_usuario['pontos_acumulados'] = 0
             
@@ -394,7 +396,7 @@ def index(request):
 
     if usuario.role == 'Vendedor':
         role = 'Vendedor'
-        ranking = RankingVendedores.objects.get(usuario=usuario)
+        rankings = RankingVendedores.objects.filter(usuario=usuario)
 
         if (user_has_photo(usuario.matricula)):
             arquivo_foto = user_has_photo(usuario.matricula)
@@ -411,16 +413,17 @@ def index(request):
         total_points = 0
         max_points = 1800
 
-        for field in ranking._meta.fields:
-            if field.name == 'usuario':
-                json['nome'] = usuario.name
-            elif field.name == 'id':
-                json['id'] = usuario.id
-            elif field.name == 'date':
-                json['date'] = getattr(ranking, 'date')
-            else:
-                json[f'{field.name}'] = getattr(ranking, field.name)
-                total_points+= getattr(ranking, field.name)
+        for ranking in rankings:
+            for field in ranking._meta.fields:
+                if field.name == 'usuario':
+                    json['nome'] = usuario.name
+                elif field.name == 'id':
+                    json['id'] = usuario.id
+                elif field.name == 'date':
+                    json['date'] = getattr(ranking, 'date')
+                else:
+                    json[f'{field.name}'] = getattr(ranking, field.name)
+                    total_points+= getattr(ranking, field.name)
 
         percentage = int((total_points/max_points)*100)
 
@@ -474,26 +477,26 @@ def index(request):
 
     elif usuario.role == 'GRM':
         role = 'Gerente'
-        ranking = RankingGerentes.objects.get(usuario=usuario)
+        rankings = RankingGerentes.objects.filter(usuario=usuario)
 
         ranking_v_bu = retrieve_ranking_vendedores_bu(usuario.regional)
-        print(ranking_v_bu)
 
 
         json = {}
         total_points = 0
         max_points = 2400
 
-        for field in ranking._meta.fields:
-            if field.name == 'usuario':
-                json['nome'] = usuario.name
-            elif field.name == 'id':
-                json['id'] = usuario.id
-            elif field.name == 'date':
-                json['date'] = getattr(ranking, 'date')
-            else:
-                json[f'{field.name}'] = getattr(ranking, field.name)
-                total_points += getattr(ranking, field.name)
+        for ranking in rankings:
+            for field in ranking._meta.fields:
+                if field.name == 'usuario':
+                    json['nome'] = usuario.name
+                elif field.name == 'id':
+                    json['id'] = usuario.id
+                elif field.name == 'date':
+                    json['date'] = getattr(ranking, 'date')
+                else:
+                    json[f'{field.name}'] = getattr(ranking, field.name)
+                    total_points += getattr(ranking, field.name)
 
         percentage = int((total_points/max_points)*100)
 
@@ -509,7 +512,7 @@ def index(request):
 
     elif usuario.role == 'GTV':
         role = 'Gerente'
-        ranking = RankingGerentes.objects.get(usuario=usuario)
+        rankings = RankingGerentes.objects.filter(usuario=usuario)
 
         ranking_v_t = retrieve_ranking_vendedores_territorio(usuario.territorio, usuario.regional)
 
@@ -517,16 +520,17 @@ def index(request):
         total_points = 0
         max_points = 2400
 
-        for field in ranking._meta.fields:
-            if field.name == 'usuario':
-                json['nome'] = usuario.name
-            elif field.name == 'id':
-                json['id'] = usuario.id
-            elif field.name == 'date':
-                json['date'] = getattr(ranking, 'date')
-            else:
-                json[f'{field.name}'] = getattr(ranking, field.name)
-                total_points += getattr(ranking, field.name)
+        for ranking in rankings:
+            for field in ranking._meta.fields:
+                if field.name == 'usuario':
+                    json['nome'] = usuario.name
+                elif field.name == 'id':
+                    json['id'] = usuario.id
+                elif field.name == 'date':
+                    json['date'] = getattr(ranking, 'date')
+                else:
+                    json[f'{field.name}'] = getattr(ranking, field.name)
+                    total_points += getattr(ranking, field.name)
 
         percentage = int((total_points/max_points)*100)
 
@@ -599,15 +603,17 @@ def update_base(request):
         regional = line['BU_x'].strip().upper()
         territorio = line['TV']
 
-        if(territorio == '-'):
-            continue
-        else:
-            pass
 
         if line['FUNÇÃO'] == 'VENDEDOR':
             role = line['FUNÇÃO'].title()
         else:
             role = line['FUNÇÃO'].strip().upper()
+
+        if(territorio == '-' and role != 'GRM'):
+            continue
+        else:
+            pass
+
 
         dia = str(line['dia']).zfill(2)
         mes = str(line['mês']).zfill(2)
@@ -616,7 +622,6 @@ def update_base(request):
         name=line['RECURSO']
 
         password= dia+mes+ano
-        print(name, matricula, role, regional, territorio, password)
 
         try:
             object_user = User.objects.get(matricula=matricula)
@@ -624,8 +629,6 @@ def update_base(request):
             object_user = User(name=name, matricula = matricula, regional=regional, territorio=territorio, role=role)
             object_user.set_password(password)
             object_user.save()
-            last_user = object_user
-        
 
         # SETANDO RANKING
         if role == 'GRM' or role == 'GTV':
@@ -646,6 +649,7 @@ def update_base(request):
 
             pontos_acumulados = line['PONTOS TOTAIS ']
             date = line['MÊS']
+
 
             object_ranking = RankingGerentes(usuario=object_user, pts_ytd_direto=pts_ytd_direto, efetividade=efetividade,
                             faturamento=faturamento, positivacao=positivacao, cobertura_vol_prime=cobertura_vol_prime,
@@ -668,6 +672,7 @@ def update_base(request):
             
             pontos_acumulados = line['PONTOS TOTAIS ']
             date = line['MÊS']
+
 
             object_ranking = RankingVendedores(usuario=object_user, efetividade=efetividade, faturamento=faturamento,
                                                positivacao=positivacao, cobertura_vol_prime=cobertura_vol_prime,

@@ -198,7 +198,7 @@
   </section>
 
 
-  <section class="section-ranking-vendedores" style="height:100vh;">
+  <section class="section-ranking-vendedores" style="height:100vh">
     <div class="div-block-12">
       <div class="div">
         <div class="name-content">
@@ -208,6 +208,7 @@
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
 
+      <div id="capsuleRankingVT" style="height:75vh; overflow-y: auto;">
       {% for object in ranking_v_t %}
       <div class="card-ranking-vendedores-atual">
         <div class="vendedor-content">
@@ -236,20 +237,23 @@
         </div>
       </div>
       {% endfor %}
+    </div>
 
     </div>
   </section>  
 
 
-  <section class="section-ranking-territorios" style="height:100vh;">
+  <section class="section-ranking-territorios" style="height:100vh">
     <div class="div-block-12">
-      <div class="div">
+      <div class="div" style="position: sticky;">
         <div class="name-content">
           <div class="title-dashboard">Ranking</div>
           <div class="name-astronaut">Top Territórios {{usuario.regional}}</div>
         </div><img src="images/ic_astrounaut.svg" loading="lazy" alt="" class="ic_astronaut">
       </div>
       <div class="update-infos">Atualizado em 19 junho 2024</div>
+
+      <div id="capsuleRankingTR" style="height:75vh; overflow-y: auto;">
       {% for object in ranking_t_r %}
       <div class="card-ranking-vendedores-atual">
         <div class="vendedor-content">
@@ -277,6 +281,7 @@
         </div> -->
       </div>
       {% endfor %}
+      </div>
       </div>
     </div>
   </section>
