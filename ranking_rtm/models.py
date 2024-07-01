@@ -17,6 +17,10 @@ class RankingGerentes(models.Model):
     pts_divers_portfolio = models.IntegerField(null=False, default=0)
     boost = models.IntegerField(null=False, default=0)
 
+    ranking_tv = models.IntegerField(null=False, blank=False, default=0)
+    ranking_bu = models.IntegerField(null=False, blank=False, default=0)
+    ranking_br = models.IntegerField(null=False, blank=False, default=0)
+
     pontos_acumulados = models.IntegerField(null=False, blank=False, default=0)
 
     date = models.DateField(default='2021-01-01')

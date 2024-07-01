@@ -141,7 +141,7 @@ def user_has_photo(matricula):
 def generate_ranking():
     json = {}
 
-    random_object = RankingRegionais.objects.get(id=1)
+    random_object = RankingRegionais.objects.first()
     choices_regionais = random_object._meta.get_field('regional').choices
 
     for regional in choices_regionais:
@@ -153,12 +153,14 @@ def generate_ranking():
         regional = usuario.regional
         
         if usuario.role == 'GRM' or usuario.role == 'GTV':
-            ranking_model = RankingGerentes.objects.get(usuario=usuario)
-            json[regional]+=ranking_model.pontos_acumulados
+            ranking_models = RankingGerentes.objects.filter(usuario=usuario)
+            for ranking_model in ranking_models:
+                json[regional]+=ranking_model.pontos_acumulados
          
         elif usuario.role == 'Vendedor':
-            ranking_model = RankingVendedores.objects.get(usuario=usuario)
-            json[regional]+=ranking_model.pontos_acumulados
+            ranking_models = RankingVendedores.objects.filter(usuario=usuario)
+            for ranking_model in ranking_models:
+                json[regional]+=ranking_model.pontos_acumulados
 
         # LÓGICA DE LOOP PELAS VARIÁVEIS DE KPI PARA ACUMULAR OS PONTOS -- EM DESUSO POR JÁ TER OS PONTOS ACUMULADOS
         #if usuario.role == 'GTM' or usuario.role == 'GTV':
@@ -236,48 +238,51 @@ def gen_ranking_territorios_regional():
         # ITERA SOBRE TODOS OS TERRITORIOS DE GERENTES E ARMAZENA NO JSON OS DADOS DO ACUMULADO
         if usuario.role == 'GRM' or usuario.role == 'GTV':
             condition1= Q(usuario=usuario)
-            ranking_model = RankingGerentes.objects.get(condition1)
+            ranking_models = RankingGerentes.objects.filter(condition1)
 
-            regional = usuario.regional
-            territorio = usuario.territorio
-            total_pontos= ranking_model.pontos_acumulados
-            data=ranking_model.date
+            for ranking_model in ranking_models:
+                regional = usuario.regional
+                territorio = usuario.territorio
+                total_pontos= ranking_model.pontos_acumulados
+                data=ranking_model.date
 
-            print(json)
-            print(usuario.territorio)
-            # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
-            if regional+territorio in json:
-                print('if')
-                json[regional+territorio]['pontos_acumulados'] = json[regional+territorio]['pontos_acumulados'] + total_pontos
-            # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
-            else:
-                print('else')
-                json_usuario['regional'] = regional
-                json_usuario['territorio'] = territorio
-                json_usuario['pontos_acumulados'] = total_pontos
-                json_usuario['data'] = data
-                json[regional+territorio] = json_usuario
+                print(json)
+                print(usuario.territorio)
+                # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
+                if regional+territorio in json:
+                    print('if')
+                    json[regional+territorio]['pontos_acumulados'] = json[regional+territorio]['pontos_acumulados'] + total_pontos
+                # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
+                else:
+                    print('else')
+                    json_usuario['regional'] = regional
+                    json_usuario['territorio'] = territorio
+                    json_usuario['pontos_acumulados'] = total_pontos
+                    json_usuario['data'] = data
+                    json[regional+territorio] = json_usuario
                 
         # ITERA SOBRE TODOS OS TERRITÓRIOS DOS VENDEDORES E ARMAZENA NO JSON OS DADOS DO ACUMULADO 
         elif usuario.role == 'Vendedor':
             condition1 = Q(usuario=usuario)
-            ranking_model = RankingVendedores.objects.get(condition1)
+            ranking_models = RankingVendedores.objects.filter(condition1)
 
-            regional = usuario.regional
-            territorio = usuario.territorio
-            total_pontos = ranking_model.pontos_acumulados
-            data = ranking_model.date
+            for ranking_model in ranking_models:
 
-            # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
-            if regional+territorio in json:
-                json[regional+territorio]['pontos_acumulados'] = json[regional+territorio]['pontos_acumulados'] + total_pontos
-            # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
-            else:
-                json_usuario['regional'] = regional
-                json_usuario['territorio'] = territorio
-                json_usuario['pontos_acumulados'] = total_pontos
-                json_usuario['data'] = data
-                json[regional+territorio] = json_usuario
+                regional = usuario.regional
+                territorio = usuario.territorio
+                total_pontos = ranking_model.pontos_acumulados
+                data = ranking_model.date
+
+                # SE O TERRITÓRIO JÁ EXISTE NO JSON, SOMA OS PONTOS
+                if regional+territorio in json:
+                    json[regional+territorio]['pontos_acumulados'] = json[regional+territorio]['pontos_acumulados'] + total_pontos
+                # CASO CONTRÁRIO, CRIA UM TERRITÓRIO NOVO
+                else:
+                    json_usuario['regional'] = regional
+                    json_usuario['territorio'] = territorio
+                    json_usuario['pontos_acumulados'] = total_pontos
+                    json_usuario['data'] = data
+                    json[regional+territorio] = json_usuario
     
     for key, value in json.items():
 
@@ -614,13 +619,12 @@ def update_base(request):
         print(name, matricula, role, regional, territorio, password)
 
         try:
+            object_user = User.objects.get(matricula=matricula)
+        except:
             object_user = User(name=name, matricula = matricula, regional=regional, territorio=territorio, role=role)
             object_user.set_password(password)
             object_user.save()
             last_user = object_user
-        except:
-            print('Fail')
-            pass
         
 
         # SETANDO RANKING
@@ -634,13 +638,20 @@ def update_base(request):
             id_ulp = line['ID ULP']
             base= line['BASE']
             pts_share_ka_cnv = line['PTS SHARE KA CNV']
-            pts_divers_portfolio = ['PTS DIVERS. PORTFÓLIO PARCERIA']
-            boost = ['BOOST']
-            print(object_user, pts_ytd_direto, efetividade, faturamento, positivacao, cobertura_vol_prime, adimplencia_prime, id_ulp, base)
+            pts_divers_portfolio = line['PTS DIVERS. PORTFÓLIO PARCERIA']
+            boost = line['BOOST']
+            ranking_tv = line['RANKING TV']
+            ranking_bu = line['RANKING BU']
+            ranking_br = line['RANKING BR']
+
+            pontos_acumulados = line['PONTOS TOTAIS ']
+            date = line['MÊS']
+
             object_ranking = RankingGerentes(usuario=object_user, pts_ytd_direto=pts_ytd_direto, efetividade=efetividade,
                             faturamento=faturamento, positivacao=positivacao, cobertura_vol_prime=cobertura_vol_prime,
                             adimplencia_prime=adimplencia_prime, id_ulp=id_ulp, base=base, pts_share_ka_cnv=pts_share_ka_cnv,
-                            pts_divers_portfolio=pts_divers_portfolio, boost=boost)
+                            pts_divers_portfolio=pts_divers_portfolio, boost=boost, ranking_tv=ranking_tv, ranking_bu=ranking_bu,
+                            ranking_br=ranking_br, date=date, pontos_acumulados=pontos_acumulados)
             object_ranking.save()
 
         elif role=='Vendedor':
@@ -651,9 +662,17 @@ def update_base(request):
             adimplencia_prime = line['ADIMPLÊNCIA PRIME']
             id_ulp = line['ID ULP']
             base= line['BASE']
+            ranking_tv = line['RANKING TV']
+            ranking_bu = line['RANKING BU']
+            ranking_br = line['RANKING BR']
+            
+            pontos_acumulados = line['PONTOS TOTAIS ']
+            date = line['MÊS']
+
             object_ranking = RankingVendedores(usuario=object_user, efetividade=efetividade, faturamento=faturamento,
                                                positivacao=positivacao, cobertura_vol_prime=cobertura_vol_prime,
-                                               adimplencia_prime=adimplencia_prime, id_ulp=id_ulp, base=base)
+                                               adimplencia_prime=adimplencia_prime, id_ulp=id_ulp, base=base, ranking_tv=ranking_tv, 
+                                               ranking_bu=ranking_bu, ranking_br=ranking_br, date=date, pontos_acumulados=pontos_acumulados)
             object_ranking.save()
 
     return JsonResponse({'Response': 'OK'})
