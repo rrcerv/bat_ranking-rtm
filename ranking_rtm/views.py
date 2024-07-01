@@ -321,7 +321,7 @@ def retrieve_ranking_vendedores_territorio(territorio, regional):
         data = cache.get(cache_key)
         if data:
             lista=data
-            print('got cache')
+            print('got cache vendedores territorio')
         else:
             for usuario in usuarios_territorio:
                 if (usuario.role == 'Vendedor'):
@@ -425,7 +425,7 @@ def retrieve_ranking_vendedores_bu(regional):
             cache.set(cache_key, lista, cache_time)
         else:
             lista=data
-            print('got cache')
+            print('got cache vendedores bu')
 
 
     else:
